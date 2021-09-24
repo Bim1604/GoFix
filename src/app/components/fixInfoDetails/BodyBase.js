@@ -31,7 +31,7 @@ const BodyBase = ({navigation, route}) => {
       setReceive(true);
     }
   }
-  console.log(route.params.city);
+
   useEffect(() => {
     GetLocation.getCurrentPosition({
       enableHighAccuracy: true,
@@ -54,7 +54,6 @@ const BodyBase = ({navigation, route}) => {
           setCity(local.search.context.location.address.city);
         });
     });
-    return () => {};
   }, []);
 
   return (

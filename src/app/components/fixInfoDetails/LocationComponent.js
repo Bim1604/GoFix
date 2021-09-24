@@ -23,7 +23,7 @@ const location = {
   latitudeDelta: 0.001,
   longitudeDelta: 0.001,
 };
-
+let isMoveTab = false;
 const LocationComponent = ({navigation, route}) => {
   const [latitude, setLatitude] = useState(route.params.lat !== undefined ? route.params.lat : 10);
   const [longitude, setLongitude] = useState(route.params.lng !== undefined ? route.params.lng : 10);
@@ -31,13 +31,13 @@ const LocationComponent = ({navigation, route}) => {
   const [address, setAddress] = useState(route.params.address);
   const [isTap, setIsTap] = useState(false);
 
-  console.log(route);
-
-  // after search
-  // function setPosition() {
-  //   setLatitude(route.params.latitude);
-  //   setLongitude(route.params.longitude);
-  // }
+  if (isMoveTab === true) {
+    isMoveTab = false;
+    setLatitude(route.params.lat);
+    setLongitude(route.params.lng);
+    setCity(route.params.city);
+    setAddress(route.params.address);
+  }
 
   return (
     <View style={stylesMap.default.container}>
@@ -50,9 +50,9 @@ const LocationComponent = ({navigation, route}) => {
           )
             .then(res => res.json())
             .then(local => {
-              setCity(local.search.context.location.address.city);
+              setCity(local.search.context.location.address.district);
               setAddress(
-                local.search.context.location.address.city +
+                local.search.context.location.address.district +
                   ', ' +
                   local.search.context.location.address.county +
                   ', ' +
@@ -85,6 +85,7 @@ const LocationComponent = ({navigation, route}) => {
             <TouchableOpacity
               style={stylesMap.default.headerTouchContainer}
               onPress={() => {
+                isMoveTab = false;
                 navigation.navigate('FixInfoDetailsComponent', {
                   address: address,
                   lat: latitude,
@@ -103,6 +104,7 @@ const LocationComponent = ({navigation, route}) => {
             <TextInput
               style={stylesMap.default.headerTextInput}
               onPressIn={() => {
+                isMoveTab = true;
                 navigation.navigate('SearchMapComponent', {
                   address: address,
                   lat: latitude,
@@ -132,6 +134,7 @@ const LocationComponent = ({navigation, route}) => {
           <TouchableOpacity
             style={stylesDetails.default.touchDetails}
             onPress={() => {
+              isMoveTab = true;
               navigation.navigate('FixInfoDetailsComponent', {
                 address: address,
                 lat: latitude,
