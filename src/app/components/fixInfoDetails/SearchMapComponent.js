@@ -1,40 +1,38 @@
 /* eslint-disable prettier/prettier */
 import {faChevronLeft} from '@fortawesome/free-solid-svg-icons';
 import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {View, StyleSheet, TextInput, Text, Button} from 'react-native';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import {width} from '../../assets/base';
-import Geocoder from 'react-native-geocoder';
-
+const APIKEY = '8-5SOefOHojoGybtR_RWzvEpYhcAdbdX-HLTX2cqcVg';
 const SearchMapComponent = ({navigation, route}) => {
   const [searchValue, setSearchValue] = useState('');
-  const [address, setAddress] = useState();
-  const [latitude, setLatitude] = useState();
-  const [longitude, setLongitude] = useState();
-  const [locality, setLocality] = useState();
-
-  const updateAddress = () => {
-    Geocoder.geocodeAddress(searchValue).then(res => {
-      if (res.length > 0) {
-        setLatitude(res[0].position.lat);
-        setLongitude(res[0].position.lng);
-        Geocoder.geocodePosition({
-          lat: res[0].position.lat,
-          lng: res[0].position.lng,
-        }).then(pos => {
-          setLocality(
-            pos[0].subAdminArea === null
-              ? pos[0].feature === null
-                ? pos[0].locality
-                : pos[0].feature
-              : pos[0].subAdminArea,
+  const [address, setAddress] = useState(route.params.address);
+  const [latitude, setLatitude] = useState(route.params.lat);
+  const [longitude, setLongitude] = useState(route.params.lng);
+  const [city, setCity] = useState(route.params.city);
+  const numberOfRs = 10;
+  // useEffect
+  useEffect(() => {
+    fetch(
+      `https://geocoder.ls.hereapi.com/search/6.2/geocode.json?languages=en-US&maxresults=${numberOfRs}&searchtext=${searchValue}&apiKey=${APIKEY}`,
+    )
+      .then(res => res.json())
+      .then(json => {
+        if (json.Response !== undefined) {
+          setLatitude(
+            json.Response.View[0].Result[0].Location.DisplayPosition.Latitude,
           );
-          setAddress(pos[0].formattedAddress);
-        });
-      }
-    });
-  };
+          setLongitude(
+            json.Response.View[0].Result[0].Location.DisplayPosition.Longitude,
+          );
+          setCity(json.Response.View[0].Result[0].Location.Address.City);
+          setAddress(json.Response.View[0].Result[0].Location.Address.Label);
+        }
+      });
+    return () => {};
+  }, [searchValue]);
 
   return (
     <View style={styles.container}>
@@ -44,17 +42,17 @@ const SearchMapComponent = ({navigation, route}) => {
           onPress={() => {
             if (latitude === undefined && searchValue === '') {
               navigation.navigate('CurrentLocationComponent', {
-                latitude: route.params.lat,
-                longitude: route.params.lng,
-                city: route.params.locality,
-                addr: route.params.address,
+                lat: latitude,
+                lng: longitude,
+                city: city,
+                address: address,
               });
             } else {
               navigation.navigate('CurrentLocationComponent', {
-                addr: address,
-                latitude: latitude,
-                longitude: longitude,
-                city: locality,
+                address: address,
+                lat: latitude,
+                lng: longitude,
+                city: city,
               });
             }
           }}>
@@ -67,9 +65,9 @@ const SearchMapComponent = ({navigation, route}) => {
             onChangeText={text => {
               setSearchValue(text);
             }}
-            onBlur={() => {
-              searchValue !== '' ? updateAddress() : console.log('cancel search');
-            }}
+            // onBlur={() => {
+            //   searchValue !== '' ? updateAddress() : console.log('cancel search');
+            // }}
             keyboardType="email-address"
           />
         </View>
@@ -110,4 +108,3 @@ const styles = StyleSheet.create({
 });
 
 export default SearchMapComponent;
-

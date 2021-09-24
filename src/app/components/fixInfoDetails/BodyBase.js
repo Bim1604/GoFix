@@ -19,18 +19,31 @@ const appID = APPID;
 const appCode = APPCODE;
 const BodyBase = ({navigation, route}) => {
   const [address, setAddress] = useState();
+  const [latitude, setLatitude] = useState();
+  const [longitude, setLongitude] = useState();
+  const [city, setCity] = useState();
+  const [receive, setReceive] = useState(false);
 
+  //  receive address by route
+  if (route.params.address !== undefined) {
+    if (receive === false) {
+      setAddress(route.params.address);
+      setReceive(true);
+    }
+  }
+  console.log(route.params.city);
   useEffect(() => {
     GetLocation.getCurrentPosition({
       enableHighAccuracy: true,
       timeout: 15000,
     }).then(location => {
+      setLatitude(location.latitude);
+      setLongitude(location.longitude);
       fetch(
         `https://places.sit.ls.hereapi.com/places/v1/discover/search?app_id=${appID}&app_code=${appCode}&at=${location.latitude},${location.longitude}&q=street`,
       )
         .then(res => res.json())
         .then(local => {
-          console.log(local);
           setAddress(
             local.search.context.location.address.city +
               ', ' +
@@ -38,6 +51,7 @@ const BodyBase = ({navigation, route}) => {
               ', ' +
               local.search.context.location.address.country,
           );
+          setCity(local.search.context.location.address.city);
         });
     });
     return () => {};
@@ -49,7 +63,10 @@ const BodyBase = ({navigation, route}) => {
       <TouchableOpacity
         onPress={() => {
           navigation.navigate('CurrentLocationComponent', {
-            address: address,
+            address: route.params.address === undefined ? address : route.params.address,
+            lat: route.params.lat === undefined ? latitude : route.params.lat,
+            lng: route.params.lng === undefined ? longitude : route.params.lng,
+            city: route.params.city === undefined ? city : route.params.city,
           });
         }}
         style={stylesBodyBase.default.bodyFormContainer}>
@@ -63,7 +80,7 @@ const BodyBase = ({navigation, route}) => {
           </View>
           <View style={stylesBodyBase.default.bodyAddressTextContainer}>
             <Text style={stylesBodyBase.default.bodyAddressText}>
-              {address}
+              {route.params.address === undefined ? address : route.params.address}
             </Text>
           </View>
           <View style={stylesBodyBase.default.bodyIconContainer}>
