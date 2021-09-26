@@ -5,7 +5,6 @@ import {StyleSheet} from 'react-native';
 const stylesBodySearch = StyleSheet.create({
   textTitle: {
     marginTop: 20,
-    marginBottom: 20,
     fontSize: 16,
   },
   suggestContainer: {

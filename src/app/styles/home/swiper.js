@@ -13,7 +13,7 @@ const stylesSwiper = StyleSheet.create({
     height: '100%',
     width: '100%',
     borderRadius: 20,
-    // marginTop: 10,
+    marginBottom: 15,
   },
   headerImage: {
     flex: 1,
@@ -40,7 +40,6 @@ const stylesSwiper = StyleSheet.create({
   // Text Body
   bodyTextContainer: {
     marginLeft: 24,
-    bottom: height / 6.8,
   },
   bodyTextTitle: {
     fontSize: 20,

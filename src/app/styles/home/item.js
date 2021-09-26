@@ -28,7 +28,7 @@ const stylesVehicle = StyleSheet.create({
   // linear
   LinearGradientWrap: {
     borderRadius: 20,
-    marginTop: 10,
+    marginTop: 30,
   },
   LinearServiceGradientWrap: {
     marginTop: 15,

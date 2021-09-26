@@ -11,10 +11,7 @@ import MapView, {Marker} from 'react-native-maps'; // remove PROVIDER_GOOGLE imp
 import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
 import {faChevronLeft, faTimes} from '@fortawesome/free-solid-svg-icons';
 import {stylesMap, stylesDetails} from '../../styles/fixInfoDetails/map/index';
-import {APPID, APPCODE} from '@env';
 
-const appID = APPID;
-const appCode = APPCODE;
 const center =
   (Dimensions.get('window').width / Dimensions.get('window').height) * 0.0122;
 const location = {
@@ -24,19 +21,57 @@ const location = {
   longitudeDelta: 0.001,
 };
 let isMoveTab = false;
+let isSearch = false;
+const apiHistory = 'https://history-search-map.herokuapp.com/api/history';
+const apiKey = 'dJFdCdCFCXpUHfhlyWyv3h8uAmLaTRn15TEAVoF2';
+
 const LocationComponent = ({navigation, route}) => {
-  const [latitude, setLatitude] = useState(route.params.lat !== undefined ? route.params.lat : 10);
-  const [longitude, setLongitude] = useState(route.params.lng !== undefined ? route.params.lng : 10);
-  const [city, setCity] = useState(route.params.city !== undefined ? route.params.city : '');
+  const [latitude, setLatitude] = useState(
+    route.params.lat !== undefined ? route.params.lat : 10,
+  );
+  const [longitude, setLongitude] = useState(
+    route.params.lng !== undefined ? route.params.lng : 10,
+  );
+  const [city, setCity] = useState(
+    route.params.city !== undefined ? route.params.city : '',
+  );
   const [address, setAddress] = useState(route.params.address);
   const [isTap, setIsTap] = useState(false);
 
+  // update location map after move tab
   if (isMoveTab === true) {
     isMoveTab = false;
     setLatitude(route.params.lat);
     setLongitude(route.params.lng);
     setCity(route.params.city);
     setAddress(route.params.address);
+  }
+
+  //  POST search value into api
+  if (isSearch === true) {
+    isSearch = false;
+    if (route.params.history === true) {
+      fetch(apiHistory, {
+        method: 'POST',
+        body: JSON.stringify({
+          city: route.params.city,
+          address: route.params.address,
+          searchValue: route.params.searchValue,
+          latitude: route.params.lat,
+          longitude: route.params.lng,
+        }),
+        headers: {
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
+      })
+        .then(response => response.json())
+        .then(data => {
+          console.log('Success:', data);
+        })
+        .catch(error => {
+          console.error('Error:', error);
+        });
+    }
   }
 
   return (
@@ -46,25 +81,20 @@ const LocationComponent = ({navigation, route}) => {
         initialRegion={location}
         onPress={event => {
           fetch(
-            `https://places.sit.ls.hereapi.com/places/v1/discover/search?app_id=${appID}&app_code=${appCode}&at=${event.nativeEvent.coordinate.latitude},${event.nativeEvent.coordinate.longitude}&q=street`,
+            `https://rsapi.goong.io/Geocode?latlng=${event.nativeEvent.coordinate.latitude},${event.nativeEvent.coordinate.longitude}&api_key=${apiKey}`,
           )
             .then(res => res.json())
             .then(local => {
-              setCity(local.search.context.location.address.district);
-              setAddress(
-                local.search.context.location.address.district +
-                  ', ' +
-                  local.search.context.location.address.county +
-                  ', ' +
-                  local.search.context.location.address.country,
-              );
+              setAddress(local.results[0].formatted_address);
+              setCity(local.results[0].address_components[2].long_name);
             });
-          setLatitude(event.nativeEvent.coordinate.latitude);
-          setLongitude(event.nativeEvent.coordinate.longitude);
+            setIsTap(false);
+            setLatitude(event.nativeEvent.coordinate.latitude);
+            setLongitude(event.nativeEvent.coordinate.longitude);
         }}
         region={{
           latitude: latitude,
-          longitude:longitude,
+          longitude: longitude,
           latitudeDelta: 0.015,
           longitudeDelta: center,
         }}>
@@ -105,6 +135,7 @@ const LocationComponent = ({navigation, route}) => {
               style={stylesMap.default.headerTextInput}
               onPressIn={() => {
                 isMoveTab = true;
+                isSearch = true;
                 navigation.navigate('SearchMapComponent', {
                   address: address,
                   lat: latitude,

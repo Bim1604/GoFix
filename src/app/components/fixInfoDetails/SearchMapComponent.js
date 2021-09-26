@@ -2,7 +2,6 @@
 import {
   faChevronLeft,
   faExternalLinkAlt,
-  faLocationArrow,
   faMapMarkerAlt,
 } from '@fortawesome/free-solid-svg-icons';
 import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
@@ -14,11 +13,47 @@ import {
   stylesBodySearch,
 } from '../../styles/fixInfoDetails/map/index';
 import {FlatList} from 'react-native-gesture-handler';
-const APIKEY = '8-5SOefOHojoGybtR_RWzvEpYhcAdbdX-HLTX2cqcVg';
 
-const LocationResult = ({district, address}) => {
+// const APIKEY = '8-5SOefOHojoGybtR_RWzvEpYhcAdbdX-HLTX2cqcVg';
+const apiHistory = 'https://history-search-map.herokuapp.com/api/history';
+const apiKey = 'dJFdCdCFCXpUHfhlyWyv3h8uAmLaTRn15TEAVoF2';
+
+const LocationResult = ({
+  district,
+  address,
+  navigation,
+  place_id,
+  latitude,
+  longitude,
+}) => {
   return (
-    <TouchableOpacity style={stylesBodySearch.default.suggestContainer}>
+    <TouchableOpacity
+      onPress={() => {
+        if (place_id !== undefined) {
+          fetch(
+            `https://rsapi.goong.io/Place/Detail?place_id=${place_id}&api_key=${apiKey}`,
+          )
+            .then(res => res.json())
+            .then(local => {
+              navigation.navigate('CurrentLocationComponent', {
+                lat: local.result.geometry.location.lat,
+                lng: local.result.geometry.location.lng,
+                city: district,
+                address: address,
+                history: true,
+              });
+            });
+        } else {
+          navigation.navigate('CurrentLocationComponent', {
+            lat: latitude,
+            lng: longitude,
+            city: district,
+            address: address,
+            history: true,
+          });
+        }
+      }}
+      style={stylesBodySearch.default.suggestContainer}>
       <View style={stylesBodySearch.default.suggestIconContainer}>
         <View style={stylesBodySearch.default.suggestIconCircle}>
           <FontAwesomeIcon
@@ -50,44 +85,64 @@ const SearchMapComponent = ({navigation, route}) => {
   const [longitude, setLongitude] = useState(route.params.lng);
   const [city, setCity] = useState(route.params.city);
   const [result, setResult] = useState([]);
-  const numberOfRs = 10;
   const [isSuggest, setIsSuggest] = useState(false);
+  const [history, setHistory] = useState([]);
+
+  useEffect(() => {
+    fetch(apiHistory)
+      .then(res => res.json())
+      .then(json => {
+        setHistory(json.reverse().slice(0, 5));
+      });
+  }, []);
 
   useEffect(() => {
     fetch(
-      `https://geocoder.ls.hereapi.com/search/6.2/geocode.json?languages=en-US&maxresults=${numberOfRs}&searchtext=${searchValue}&apiKey=${APIKEY}`,
+      `https://rsapi.goong.io/Place/AutoComplete?api_key=${apiKey}&input=${searchValue}`,
     )
       .then(res => res.json())
       .then(json => {
-        if (json.Response !== undefined) {
-          setResult(json.Response.View[0].Result);
-          setLatitude(
-            json.Response.View[0].Result[0].Location.DisplayPosition.Latitude,
-          );
-          setLongitude(
-            json.Response.View[0].Result[0].Location.DisplayPosition.Longitude,
-          );
-          setCity(json.Response.View[0].Result[0].Location.Address.District);
-          setAddress(json.Response.View[0].Result[0].Location.Address.Label);
+        if (searchValue !== '') {
+          setIsSuggest(true);
+          setResult(json.predictions);
+          fetch(
+            `https://rsapi.goong.io/Place/Detail?place_id=${json.predictions[0].place_id}&api_key=${apiKey}`,
+          )
+            .then(res => res.json())
+            .then(local => {
+              setLatitude(local.result.geometry.location.lat);
+              setLongitude(local.result.geometry.location.lng);
+              setCity(local.result.name);
+              setAddress(local.result.formatted_address);
+            });
         }
       });
+
     return () => {};
   }, [searchValue]);
 
-  let renderItem = ({item, index}) => {
+  let renderItemSearch = ({item, index}) => {
     return (
       <View>
         <LocationResult
-          district={
-            item.Location.Address.District === undefined
-              ? item.Location.Address.State === undefined
-                ? item.Location.Address.County !== undefined
-                  ? item.Location.Address.County
-                  : item.Location.Address.Country
-                : item.Location.Address.State
-              : item.Location.Address.District
-          }
-          address={item.Location.Address.Label}
+          district={item.structured_formatting.main_text}
+          address={item.structured_formatting.secondary_text}
+          navigation={navigation}
+          place_id={item.place_id}
+        />
+      </View>
+    );
+  };
+
+  let renderItemHistory = ({item, index}) => {
+    return (
+      <View>
+        <LocationResult
+          district={item.city}
+          address={item.address}
+          latitude={item.latitude}
+          longitude={item.longitude}
+          navigation={navigation}
         />
       </View>
     );
@@ -99,10 +154,10 @@ const SearchMapComponent = ({navigation, route}) => {
         <TouchableOpacity
           onPress={() => {
             navigation.navigate('CurrentLocationComponent', {
-              lat: latitude,
-              lng: longitude,
-              city: city,
-              address: address,
+              lat: route.params.lat,
+              lng: route.params.lng,
+              city: route.params.city,
+              address: route.params.address,
             });
           }}>
           <FontAwesomeIcon icon={faChevronLeft} size={22} />
@@ -113,16 +168,14 @@ const SearchMapComponent = ({navigation, route}) => {
             placeholder="Tìm kiếm"
             onChangeText={text => {
               setSearchValue(text);
-              if (address !== '') {
-                setIsSuggest(true);
-              }
             }}
-            onBlur={() => {
+            onSubmitEditing={() => {
               navigation.navigate('CurrentLocationComponent', {
                 address: address,
                 lat: latitude,
                 lng: longitude,
                 city: city,
+                history: true,
               });
             }}
             keyboardType="email-address"
@@ -130,13 +183,25 @@ const SearchMapComponent = ({navigation, route}) => {
         </View>
       </View>
       {isSuggest === false ? (
-        <Text style={stylesBodySearch.default.textTitle}>Gần đây</Text>
+        <View>
+          <Text style={stylesBodySearch.default.textTitle}>Gần đây</Text>
+          {/* FlatList History */}
+          <FlatList
+            data={history}
+            horizontal={false}
+            renderItem={renderItemHistory}
+          />
+        </View>
       ) : (
         <View />
       )}
-      {/* Flat Lish history */}
+      {/* FlatList Search */}
       <View>
-        <FlatList data={result} horizontal={false} renderItem={renderItem} />
+        <FlatList
+          data={result}
+          horizontal={false}
+          renderItem={renderItemSearch}
+        />
       </View>
     </View>
   );

@@ -1,7 +1,7 @@
 /* eslint-disable prettier/prettier */
 
 import {StyleSheet} from 'react-native';
-import {width} from '../../../assets/base';
+import {width, height} from '../../../assets/base';
 
 const stylesHeaderSearch = StyleSheet.create({
     // header
@@ -9,6 +9,7 @@ const stylesHeaderSearch = StyleSheet.create({
     paddingLeft: 15,
     paddingTop: 30,
     backgroundColor: '#fff',
+    height: height,
   },
   headerContainer: {
     borderColor: '#dfdcdc',
