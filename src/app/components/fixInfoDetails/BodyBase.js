@@ -13,47 +13,8 @@ import {
   stylesBodyItem,
   stylesBodyBase,
 } from '../../styles/fixInfoDetails/index';
-import GetLocation from 'react-native-get-location';
-import {APPID, APPCODE} from '@env';
-const appID = APPID;
-const appCode = APPCODE;
-const apiKey = 'dJFdCdCFCXpUHfhlyWyv3h8uAmLaTRn15TEAVoF2';
 
-const BodyBase = ({navigation, route}) => {
-  const [address, setAddress] = useState();
-  const [latitude, setLatitude] = useState();
-  const [longitude, setLongitude] = useState();
-  const [city, setCity] = useState();
-  const [receive, setReceive] = useState(false);
-
-  //  receive address by route
-  if (route.params.address !== undefined) {
-    if (receive === false) {
-      setAddress(route.params.address);
-      setReceive(true);
-    }
-  }
-
-  useEffect(() => {
-    GetLocation.getCurrentPosition({
-      enableHighAccuracy: true,
-      timeout: 15000,
-    }).then(location => {
-      console.log(location.latitude);
-      console.log(location.longitude);
-      setLatitude(location.latitude);
-      setLongitude(location.longitude);
-      fetch(
-        `https://rsapi.goong.io/Geocode?latlng=${location.latitude},${location.longitude}&api_key=${apiKey}`,
-      )
-        .then(res => res.json())
-        .then(local => {
-          setAddress(local.results[0].formatted_address);
-          setCity(local.results[0].address_components[2].long_name);
-        });
-    });
-  }, []);
-
+const BodyBase = ({navigation, route, address, latitude, longitude, city}) => {
   return (
     <View>
       <Text style={stylesBodyBase.default.bodyTitle}>VỊ TRÍ HIỆN TẠI</Text>

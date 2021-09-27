@@ -38,9 +38,6 @@ const stylesSwiper = StyleSheet.create({
     margin: 3,
   },
   // Text Body
-  bodyTextContainer: {
-    marginLeft: 24,
-  },
   bodyTextTitle: {
     fontSize: 20,
     color: '#fb6100',

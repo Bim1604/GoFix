@@ -13,6 +13,11 @@ const BottomView = ({
   readyBugi,
   readyTooHot,
   readyChetMay,
+  navigation,
+  lat,
+  lng,
+  address,
+  city,
 }) => {
   return (
     <View>
@@ -39,7 +44,27 @@ const BottomView = ({
             !readyChetMay
               ? stylesBottom.default.bottomTouchableNotReady
               : stylesBottom.default.bottomTouchableReady
-          }>
+          }
+          onPress={() => {
+            if (
+              description.length === 0 &&
+              !readyHetBinh &&
+              !readyLopXe &&
+              !readyBeBanh &&
+              !readyBugi &&
+              !readyTooHot &&
+              !readyChetMay
+            ) {
+              console.log('hi');
+            } else {
+              navigation.navigate('WaitingMechanicComponent', {
+                latitude: lat,
+                longitude: lng,
+                address: address,
+                city: city,
+              });
+            }
+          }}>
           <Text style={stylesBottom.default.bottomTextTouchable}>
             XÁC NHẬN VÀ TIẾP TỤC
           </Text>
