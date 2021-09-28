@@ -62,6 +62,13 @@ const BottomView = ({
                 longitude: lng,
                 address: address,
                 city: city,
+                hetBinh: readyHetBinh ? 'Xe hết bình ác quy' : '',
+                lopXe: readyLopXe ? 'Lốp xe bị phồng' : '',
+                beBanh: readyBeBanh ? 'Bể bánh xe' : '',
+                buGi: readyBugi ? 'Hư bu gi' : '',
+                hopSo: readyTooHot ? 'Lỗi hộp số' : '',
+                chetMay: readyChetMay ? 'Xe chết máy' : '',
+                description: description !== '' ? description : '',
               });
             }
           }}>

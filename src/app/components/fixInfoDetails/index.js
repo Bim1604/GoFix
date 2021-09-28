@@ -26,19 +26,18 @@ const FixInfoDetailsComponent = ({navigation, route}) => {
   const [latitude, setLatitude] = useState();
   const [longitude, setLongitude] = useState();
   const [city, setCity] = useState();
-  const [receive, setReceive] = useState(false);
 
-  //  receive address by route
-  if (route.params.address !== undefined) {
-    if (receive === false) {
-      console.log(3);
-      setAddress(route.params.address);
-      setLatitude(route.params.lat);
-      setLongitude(route.params.lng);
-      setCity(route.params.city);
-      setReceive(true);
-    }
-  }
+  useEffect(() => {
+    setAddress(route.params.address);
+    setLatitude(route.params.lat);
+    setLongitude(route.params.lng);
+    setCity(route.params.city);
+  }, [
+    route.params.address,
+    route.params.city,
+    route.params.lat,
+    route.params.lng,
+  ]);
 
   useEffect(() => {
     GetLocation.getCurrentPosition({
@@ -61,9 +60,16 @@ const FixInfoDetailsComponent = ({navigation, route}) => {
   return (
     <View style={stylesBodyBase.default.container}>
       <ScrollView ref={scrollRef}>
-        <HeaderComponent navigation={navigation}/>
+        <HeaderComponent navigation={navigation} />
         <View style={stylesBodyBase.default.bodyContainer}>
-          <BodyBase address={address} city={city} latitude={latitude} longitude={longitude} route={route} navigation={navigation}/>
+          <BodyBase
+            address={address}
+            city={city}
+            latitude={latitude}
+            longitude={longitude}
+            route={route}
+            navigation={navigation}
+          />
           <BodyFormItem
             setCheckDescription={setCheckDescription}
             setDescription={setDescription}

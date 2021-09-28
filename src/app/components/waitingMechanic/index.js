@@ -1,32 +1,77 @@
 /* eslint-disable prettier/prettier */
-import React, {useEffect, useRef, useState} from 'react';
-import {
-  ActivityIndicator,
-  StyleSheet,
-  Text,
-  View,
-  Dimensions,
-  Image,
-} from 'react-native';
-import {TouchableOpacity} from 'react-native-gesture-handler';
+import React, {useEffect, useState} from 'react';
+import {ActivityIndicator, StyleSheet, Text, View, Image} from 'react-native';
+import {FlatList, TouchableOpacity} from 'react-native-gesture-handler';
 import {height, width} from '../../assets/base';
 import MapView, {Marker} from 'react-native-maps';
-import GetLocation from 'react-native-get-location';
 import mechanic from '../../assets/image/XeMay2.png';
 import avatar from '../../assets/image/mechanic.jpg';
 import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
 import {
   faAngleDoubleDown,
   faAngleDoubleUp,
-  faArrowAltCircleUp,
+  faMapMarkerAlt,
   faPhoneAlt,
+  faUser,
+  faWrench,
 } from '@fortawesome/free-solid-svg-icons';
-import cancelPhone from '../../assets/image/242275837_1784231768445384_2902697158299168411_n.png';
-
 const WaitingMechanic = ({navigation, route}) => {
   const [isLoaded, setIsLoaded] = useState(false);
   const [latitude, setLatitude] = useState();
   const [longitude, setLongitude] = useState();
+  const [readyHetBinh, setReadyHetBinh] = useState('');
+  const [readyBeBanh, setReadyBeBanh] = useState('');
+  const [readyChetMay, setReadyChetMay] = useState('');
+  const [readyTooHot, setReadyTooHot] = useState('');
+  const [readyLopXe, setReadyLopXe] = useState('');
+  const [readyBugi, setReadyBugi] = useState('');
+  const [description, setDescription] = useState('');
+  const [totalCost, setTotalCost] = useState();
+  let total = 0;
+  const data = [
+    {
+      content: readyHetBinh,
+      cost: 300,
+      isChoose: readyHetBinh === '' ? false : true,
+    },
+    {
+      content: readyBeBanh,
+      cost: 300,
+      isChoose: readyBeBanh === '' ? false : true,
+    },
+    {
+      content: readyChetMay,
+      cost: 70,
+      isChoose: readyChetMay === '' ? false : true,
+    },
+    {
+      content: readyTooHot,
+      cost: 160,
+      isChoose: readyTooHot === '' ? false : true,
+    },
+    {
+      content: readyLopXe,
+      cost: 100,
+      isChoose: readyLopXe === '' ? false : true,
+    },
+    {
+      content: readyBugi,
+      cost: 100,
+      isChoose: readyBugi === '' ? false : true,
+    },
+    {
+      content: description,
+      cost: 300,
+      isChoose: description === '' ? false : true,
+    },
+  ];
+
+  for (let index = 0; index < data.length; index++) {
+    if (data[index].isChoose === true) {
+      total = total + data[index].cost;
+    }
+  }
+
   useEffect(() => {
     setTimeout(() => {
       setIsLoaded(true);
@@ -36,7 +81,26 @@ const WaitingMechanic = ({navigation, route}) => {
   useEffect(() => {
     setLatitude(route.params.latitude);
     setLongitude(route.params.longitude);
-  }, [route.params.latitude, route.params.longitude]);
+    setReadyHetBinh(route.params.hetBinh);
+    setReadyBeBanh(route.params.beBanh);
+    setReadyChetMay(route.params.chetMay);
+    setReadyTooHot(route.params.hopSo);
+    setReadyLopXe(route.params.lopXe);
+    setReadyBugi(route.params.buGi);
+    setDescription(route.params.description);
+    setTotalCost(total);
+  }, [
+    route.params.beBanh,
+    route.params.buGi,
+    route.params.chetMay,
+    route.params.description,
+    route.params.hetBinh,
+    route.params.hopSo,
+    route.params.latitude,
+    route.params.longitude,
+    route.params.lopXe,
+    total,
+  ]);
 
   return (
     <View style={styles.container}>
@@ -67,13 +131,32 @@ const WaitingMechanic = ({navigation, route}) => {
           navigation={navigation}
           city={route.params.city}
           address={route.params.address}
+          data={data}
+          totalCost={totalCost}
         />
       )}
     </View>
   );
 };
 
-const AcceptComponent = ({latUser, lngUser, navigation, address, city}) => {
+const DetailsFixer = ({content, cost}) => {
+  return (
+    <View style={styles.bottomBodyFixTextContainer}>
+      <Text style={styles.bottomBodyFixTextTitle}>{content} </Text>
+      <Text style={styles.bottomBodyFixTextCost}>{cost}.000</Text>
+    </View>
+  );
+};
+
+const AcceptComponent = ({
+  latUser,
+  lngUser,
+  navigation,
+  address,
+  city,
+  data,
+  totalCost,
+}) => {
   const [latAverage, setLatAverage] = useState(1);
   const [lngAverage, setLngAverage] = useState(1);
   const [isShowInfo, setIsShowInfo] = useState(false);
@@ -101,6 +184,16 @@ const AcceptComponent = ({latUser, lngUser, navigation, address, city}) => {
     }
   }, [latMechanic, latUser, lngMechanic, lngUser]);
 
+  let renderItem = ({item, index}) => {
+    if (item.isChoose === false) {
+      return;
+    }
+    return (
+      <View>
+        <DetailsFixer content={item.content} cost={item.cost} />
+      </View>
+    );
+  };
   return (
     <View style={styles.mapContainer}>
       <MapView
@@ -146,14 +239,27 @@ const AcceptComponent = ({latUser, lngUser, navigation, address, city}) => {
           />
         </TouchableOpacity>
         {/* Bottom Body */}
-        <View style={isShowInfo === true ? styles.bottomBodyContainerShow : styles.bottomBodyContainer}>
+        <View
+          style={
+            isShowInfo === true
+              ? styles.bottomBodyContainerShow
+              : styles.bottomBodyContainer
+          }>
+          <View style={styles.bottomBodyTitleTextContainer}>
+            <FontAwesomeIcon
+              style={styles.bottomBodyIcon}
+              icon={faUser}
+              size={20}
+            />
+            <Text style={styles.bottomBodyTitle}>Thông tin thợ sửa</Text>
+          </View>
           <View style={styles.bottomBodyUserContainer}>
             <View style={styles.bottomBodyImageContainer}>
               <Image source={avatar} style={styles.bottomBodyImage} />
             </View>
             <View style={styles.bottomBodyTextContainer}>
               <View style={styles.bottomBodyTitleContainer}>
-                <Text style={styles.bottomBodyTextName}>Trần Thị Mộng Du</Text>
+                <Text style={styles.bottomBodyTextName}>Trần Thị Vi</Text>
                 <Text style={styles.bottomBodyText}>0971547522</Text>
                 <Text style={styles.bottomBodyText}>
                   123 Lê Văn Việt, quận 9, thành phố Hồ Chí Minh
@@ -164,52 +270,27 @@ const AcceptComponent = ({latUser, lngUser, navigation, address, city}) => {
           {isShowInfo === true ? (
             <View>
               <View style={styles.bottomBodyAddressContainer}>
-                <Text style={styles.bottomBodyAddressTitle}>
-                  Địa chỉ của bạn
-                </Text>
+                <View style={styles.bottomBodyTitleTextContainer}>
+                  <FontAwesomeIcon
+                    style={styles.bottomBodyIcon}
+                    icon={faMapMarkerAlt}
+                    size={20}
+                  />
+                  <Text style={styles.bottomBodyTitle}>Địa chỉ của bạn</Text>
+                </View>
                 <Text style={styles.bottomBodyAddressText}>{address}</Text>
               </View>
               <View style={styles.bottomBodyFixContainer}>
-                <Text style={styles.bottomBodyAddressTitle}>
-                  Chi tiết sửa chữa
-                </Text>
+                <View style={styles.bottomBodyTitleTextContainer}>
+                  <FontAwesomeIcon
+                    style={styles.bottomBodyIcon}
+                    icon={faWrench}
+                    size={20}
+                  />
+                  <Text style={styles.bottomBodyTitle}>Chi tiết sửa chữa</Text>
+                </View>
                 <View>
-                  <View style={styles.bottomBodyFixTextContainer}>
-                    <Text style={styles.bottomBodyFixTextTitle}>
-                      Xe bị phồng:{' '}
-                    </Text>
-                    <Text style={styles.bottomBodyFixTextCost}>200.000 Đ</Text>
-                  </View>
-                  <View style={styles.bottomBodyFixTextContainer}>
-                    <Text style={styles.bottomBodyFixTextTitle}>
-                      Xe bị phồng:{' '}
-                    </Text>
-                    <Text style={styles.bottomBodyFixTextCost}>200.000 Đ</Text>
-                  </View>
-                  <View style={styles.bottomBodyFixTextContainer}>
-                    <Text style={styles.bottomBodyFixTextTitle}>
-                      Xe bị phồng:{' '}
-                    </Text>
-                    <Text style={styles.bottomBodyFixTextCost}>1200.000 Đ</Text>
-                  </View>
-                  <View style={styles.bottomBodyFixTextContainer}>
-                    <Text style={styles.bottomBodyFixTextTitle}>
-                      Xe bị phồng:{' '}
-                    </Text>
-                    <Text style={styles.bottomBodyFixTextCost}>200.000 Đ</Text>
-                  </View>
-                  <View style={styles.bottomBodyFixTextContainer}>
-                    <Text style={styles.bottomBodyFixTextTitle}>
-                      Xe bị phồng:{' '}
-                    </Text>
-                    <Text style={styles.bottomBodyFixTextCost}>200.000 Đ</Text>
-                  </View>
-                  <View style={styles.bottomBodyFixTextContainer}>
-                    <Text style={styles.bottomBodyFixTextTitle}>
-                      Xe bị phồng:{' '}
-                    </Text>
-                    <Text style={styles.bottomBodyFixTextCost}>200.000 Đ</Text>
-                  </View>
+                  <FlatList data={data} renderItem={renderItem} />
                 </View>
               </View>
             </View>
@@ -218,9 +299,7 @@ const AcceptComponent = ({latUser, lngUser, navigation, address, city}) => {
           )}
           <View style={styles.bottomBodyTextContainerShow}>
             <Text style={styles.bottomBodyTotalTitle}>Tổng tiền:</Text>
-            <Text style={styles.bottomBodyTotalText}>
-              300.000 Đ - 600.000 Đ
-            </Text>
+            <Text style={styles.bottomBodyTotalText}>{totalCost}.000</Text>
           </View>
         </View>
         {/* Bottom Footer */}
@@ -299,7 +378,7 @@ const styles = StyleSheet.create({
     width: '100%',
   },
   mapDetailsShow: {
-    height: '70%',
+    height: '67%',
     width: '100%',
   },
   // Marker
@@ -312,6 +391,9 @@ const styles = StyleSheet.create({
     height: '70%',
     width: '100%',
     backgroundColor: '#fff',
+    borderTopLeftRadius: 20,
+    borderTopRightRadius: 20,
+    borderTopColor: '#000',
   },
   // Header
   bottomHeaderContainer: {
@@ -339,7 +421,6 @@ const styles = StyleSheet.create({
   bottomBodyUserContainer: {
     width: '100%',
     flexDirection: 'row',
-    paddingTop: 10,
     paddingLeft: 10,
     paddingBottom: 10,
   },
@@ -371,29 +452,41 @@ const styles = StyleSheet.create({
   bottomBodyText: {
     fontSize: 14,
     marginTop: 3,
+    color: '#7c7d7e',
   },
   bottomBodyTextName: {
-    fontSize: 14,
+    fontSize: 16,
     marginTop: 3,
     marginRight: 80,
   },
   //  Bottom body address
   bottomBodyAddressContainer: {
+    marginTop: 10,
     borderTopWidth: 1,
     borderTopColor: '#D3D3D3',
     borderBottomWidth: 1,
     borderBottomColor: '#D3D3D3',
     paddingBottom: 5,
   },
-  bottomBodyAddressTitle: {
+  bottomBodyTitleTextContainer: {
+    flexDirection: 'row',
+  },
+  bottomBodyIcon: {
+    alignSelf: 'flex-start',
+    marginLeft: 20,
+    marginTop: 10,
+    marginRight: 10,
+    color: '#fb6100',
+  },
+  bottomBodyTitle: {
     fontSize: 16,
     fontWeight: '700',
-    alignSelf: 'center',
+    marginTop: 10,
     marginBottom: 5,
-    marginTop: 5,
   },
   bottomBodyAddressText: {
     paddingLeft: 15,
+    marginBottom: 10,
   },
   // Bottom body fixer details
   bottomBodyFixContainer: {
@@ -445,10 +538,7 @@ const styles = StyleSheet.create({
   bottomFooterButtonContainerShow: {
     borderTopColor: '#D3D3D3',
     borderTopWidth: 1,
-    borderBottomColor: '#D3D3D3',
-    borderBottomWidth: 1,
     paddingTop: 10,
-    paddingBottom: 10,
   },
   bottomFooterButtonCall: {
     borderWidth: 1,

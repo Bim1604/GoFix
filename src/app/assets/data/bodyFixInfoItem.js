@@ -1,7 +1,7 @@
 /* eslint-disable prettier/prettier */
 export const dataLeft = [
   {
-    text: 'Lỗi hộp số',
+    text: 'Xe hết bình ác quy',
   },
   {
     text: 'Bể bánh xe',
@@ -15,7 +15,7 @@ export const dataLeft = [
 ];
 export const dataRight = [
   {
-    text: 'Xe hết bình ác quy',
+    text: 'Lỗi hộp số',
   },
   {
     text: 'Lốp xe bị phồng',
