@@ -15,7 +15,12 @@ import GetLocation from 'react-native-get-location';
 import mechanic from '../../assets/image/XeMay2.png';
 import avatar from '../../assets/image/mechanic.jpg';
 import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
-import {faPhoneAlt} from '@fortawesome/free-solid-svg-icons';
+import {
+  faAngleDoubleDown,
+  faAngleDoubleUp,
+  faArrowAltCircleUp,
+  faPhoneAlt,
+} from '@fortawesome/free-solid-svg-icons';
 import cancelPhone from '../../assets/image/242275837_1784231768445384_2902697158299168411_n.png';
 
 const WaitingMechanic = ({navigation, route}) => {
@@ -71,10 +76,17 @@ const WaitingMechanic = ({navigation, route}) => {
 const AcceptComponent = ({latUser, lngUser, navigation, address, city}) => {
   const [latAverage, setLatAverage] = useState(1);
   const [lngAverage, setLngAverage] = useState(1);
-  const latMechanic = latUser + 0.0675;
-  const lngMechanic = lngUser + 0.0035;
-  const LONGITUDE_DELTA = (lngMechanic - lngUser) / (lngUser / lngMechanic / 2);
-  const LATITUDE_DELTA = (latMechanic - latUser) / (latUser / latMechanic / 2);
+  const [isShowInfo, setIsShowInfo] = useState(false);
+  const latMechanic = latUser + 0.0045;
+  const lngMechanic = lngUser + 0.0045;
+  const LONGITUDE_DELTA =
+    lngUser < lngMechanic
+      ? (lngMechanic - lngUser) / (lngUser / lngMechanic / 2)
+      : (lngUser - lngMechanic) / (lngUser / lngMechanic / 2);
+  const LATITUDE_DELTA =
+    latUser < latMechanic
+      ? (latMechanic - latUser) / (latUser / latMechanic / 2)
+      : (latUser - latMechanic) / (latUser / latMechanic / 2);
 
   useEffect(() => {
     if (latUser > latMechanic) {
@@ -92,7 +104,7 @@ const AcceptComponent = ({latUser, lngUser, navigation, address, city}) => {
   return (
     <View style={styles.mapContainer}>
       <MapView
-        style={styles.map}
+        style={isShowInfo === true ? styles.map : styles.mapDetailsShow}
         region={{
           latitude: latAverage,
           longitude: lngAverage,
@@ -121,37 +133,125 @@ const AcceptComponent = ({latUser, lngUser, navigation, address, city}) => {
         />
       </MapView>
       <View style={styles.bottomContainer}>
-        <View style={styles.bottomHeaderContainer}>
-          <View style={styles.bottomHeaderImageContainer}>
-            <Image source={avatar} style={styles.bottomHeaderImage} />
-          </View>
-          <View style={styles.bottomHeaderTextContainer}>
-            <View style={styles.bottomTextContainer}>
-              <Text style={styles.bottomHeaderTextName}>Trần Thị Mộng Du</Text>
-              <Text style={styles.bottomHeaderText}>Tổng: 400000Đ</Text>
+        {/* Bottom Header */}
+        <TouchableOpacity
+          style={styles.bottomHeaderContainer}
+          onPress={() => {
+            setIsShowInfo(prevState => !prevState);
+          }}>
+          <FontAwesomeIcon
+            style={styles.bottomHeaderButton}
+            icon={isShowInfo === true ? faAngleDoubleDown : faAngleDoubleUp}
+            size={22}
+          />
+        </TouchableOpacity>
+        {/* Bottom Body */}
+        <View style={isShowInfo === true ? styles.bottomBodyContainerShow : styles.bottomBodyContainer}>
+          <View style={styles.bottomBodyUserContainer}>
+            <View style={styles.bottomBodyImageContainer}>
+              <Image source={avatar} style={styles.bottomBodyImage} />
             </View>
-            <Text style={styles.bottomHeaderText}>0971547522</Text>
-            <Text style={styles.bottomHeaderText}>
-              123 Lê Văn Việt, quận 9, thành phố Hồ Chí Minh
+            <View style={styles.bottomBodyTextContainer}>
+              <View style={styles.bottomBodyTitleContainer}>
+                <Text style={styles.bottomBodyTextName}>Trần Thị Mộng Du</Text>
+                <Text style={styles.bottomBodyText}>0971547522</Text>
+                <Text style={styles.bottomBodyText}>
+                  123 Lê Văn Việt, quận 9, thành phố Hồ Chí Minh
+                </Text>
+              </View>
+            </View>
+          </View>
+          {isShowInfo === true ? (
+            <View>
+              <View style={styles.bottomBodyAddressContainer}>
+                <Text style={styles.bottomBodyAddressTitle}>
+                  Địa chỉ của bạn
+                </Text>
+                <Text style={styles.bottomBodyAddressText}>{address}</Text>
+              </View>
+              <View style={styles.bottomBodyFixContainer}>
+                <Text style={styles.bottomBodyAddressTitle}>
+                  Chi tiết sửa chữa
+                </Text>
+                <View>
+                  <View style={styles.bottomBodyFixTextContainer}>
+                    <Text style={styles.bottomBodyFixTextTitle}>
+                      Xe bị phồng:{' '}
+                    </Text>
+                    <Text style={styles.bottomBodyFixTextCost}>200.000 Đ</Text>
+                  </View>
+                  <View style={styles.bottomBodyFixTextContainer}>
+                    <Text style={styles.bottomBodyFixTextTitle}>
+                      Xe bị phồng:{' '}
+                    </Text>
+                    <Text style={styles.bottomBodyFixTextCost}>200.000 Đ</Text>
+                  </View>
+                  <View style={styles.bottomBodyFixTextContainer}>
+                    <Text style={styles.bottomBodyFixTextTitle}>
+                      Xe bị phồng:{' '}
+                    </Text>
+                    <Text style={styles.bottomBodyFixTextCost}>1200.000 Đ</Text>
+                  </View>
+                  <View style={styles.bottomBodyFixTextContainer}>
+                    <Text style={styles.bottomBodyFixTextTitle}>
+                      Xe bị phồng:{' '}
+                    </Text>
+                    <Text style={styles.bottomBodyFixTextCost}>200.000 Đ</Text>
+                  </View>
+                  <View style={styles.bottomBodyFixTextContainer}>
+                    <Text style={styles.bottomBodyFixTextTitle}>
+                      Xe bị phồng:{' '}
+                    </Text>
+                    <Text style={styles.bottomBodyFixTextCost}>200.000 Đ</Text>
+                  </View>
+                  <View style={styles.bottomBodyFixTextContainer}>
+                    <Text style={styles.bottomBodyFixTextTitle}>
+                      Xe bị phồng:{' '}
+                    </Text>
+                    <Text style={styles.bottomBodyFixTextCost}>200.000 Đ</Text>
+                  </View>
+                </View>
+              </View>
+            </View>
+          ) : (
+            <View />
+          )}
+          <View style={styles.bottomBodyTextContainerShow}>
+            <Text style={styles.bottomBodyTotalTitle}>Tổng tiền:</Text>
+            <Text style={styles.bottomBodyTotalText}>
+              300.000 Đ - 600.000 Đ
             </Text>
           </View>
         </View>
-        <View style={styles.bottomBodyContainer}>
-          <TouchableOpacity style={styles.bottomBodyButtonCall}>
-            <FontAwesomeIcon icon={faPhoneAlt} color="#fff" size={20} />
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={styles.bottomBodyButtonCancel}
-            onPress={() => {
-              navigation.navigate('FixInfoDetailsComponent', {
-                address: address,
-                lat: latUser,
-                lng: lngUser,
-                city: city,
-              });
-            }}>
-            <Image source={cancelPhone} style={styles.cancelButtonImage} />
-          </TouchableOpacity>
+        {/* Bottom Footer */}
+        <View style={styles.bottomFooterContainer}>
+          <View
+            style={
+              isShowInfo === true
+                ? styles.bottomFooterButtonContainerShow
+                : styles.bottomFooterButtonContainer
+            }>
+            <TouchableOpacity style={styles.bottomFooterButtonCall}>
+              <FontAwesomeIcon icon={faPhoneAlt} color="#fff" size={20} />
+            </TouchableOpacity>
+          </View>
+          {/* Hủy dịch vụ */}
+          {isShowInfo === true ? (
+            <TouchableOpacity
+              style={styles.bottomFooterButtonCancel}
+              onPress={() => {
+                navigation.navigate('FixInfoDetailsComponent', {
+                  address: address,
+                  lat: latUser,
+                  lng: lngUser,
+                  city: city,
+                });
+              }}>
+              <Text style={styles.bottomFooterButtonText}>Hủy dịch vụ</Text>
+            </TouchableOpacity>
+          ) : (
+            <View />
+          )}
         </View>
       </View>
     </View>
@@ -195,7 +295,11 @@ const styles = StyleSheet.create({
     width: width,
   },
   map: {
-    height: '80%',
+    height: '25%',
+    width: '100%',
+  },
+  mapDetailsShow: {
+    height: '70%',
     width: '100%',
   },
   // Marker
@@ -209,14 +313,37 @@ const styles = StyleSheet.create({
     width: '100%',
     backgroundColor: '#fff',
   },
+  // Header
   bottomHeaderContainer: {
-    height: '15%',
+    paddingLeft: 10,
+    flexDirection: 'row',
+    alignContent: 'center',
+    justifyContent: 'center',
+    paddingTop: 5,
+    paddingBottom: 5,
+    borderBottomWidth: 1,
+    borderBottomColor: '#D3D3D3',
+  },
+  bottomHeaderButton: {
+    color: '#808080',
+  },
+  // Body
+  bottomBodyContainer: {
+    flexDirection: 'column',
+  },
+  bottomBodyContainerShow: {
+    flexDirection: 'column',
+    height: '75%',
+  },
+  //  Bottom Body User
+  bottomBodyUserContainer: {
     width: '100%',
     flexDirection: 'row',
     paddingTop: 10,
     paddingLeft: 10,
+    paddingBottom: 10,
   },
-  bottomHeaderImageContainer: {
+  bottomBodyImageContainer: {
     margin: 3,
     width: 60,
     height: 60,
@@ -226,61 +353,129 @@ const styles = StyleSheet.create({
     borderRadius: 40,
     borderColor: '#fb6100',
   },
-  bottomHeaderImage: {
+  bottomBodyImage: {
     width: '100%',
     height: '100%',
     borderWidth: 1,
     borderRadius: 40,
   },
-  bottomTextContainer: {
+  bottomBodyTextContainer: {
     flexDirection: 'row',
   },
-  bottomHeaderTextContainer: {
+  bottomBodyTitleContainer: {
     marginLeft: 15,
     flexDirection: 'column',
-    width: '80%',
+    width: '90%',
     height: 60,
   },
-  bottomHeaderText: {
+  bottomBodyText: {
     fontSize: 14,
     marginTop: 3,
   },
-  bottomHeaderTextName: {
+  bottomBodyTextName: {
     fontSize: 14,
     marginTop: 3,
     marginRight: 80,
   },
-  //  bottom body
-  bottomBodyContainer: {
-    flexDirection: 'row',
+  //  Bottom body address
+  bottomBodyAddressContainer: {
+    borderTopWidth: 1,
+    borderTopColor: '#D3D3D3',
+    borderBottomWidth: 1,
+    borderBottomColor: '#D3D3D3',
+    paddingBottom: 5,
   },
-  bottomBodyButtonCall: {
+  bottomBodyAddressTitle: {
+    fontSize: 16,
+    fontWeight: '700',
+    alignSelf: 'center',
+    marginBottom: 5,
+    marginTop: 5,
+  },
+  bottomBodyAddressText: {
+    paddingLeft: 15,
+  },
+  // Bottom body fixer details
+  bottomBodyFixContainer: {
+    borderBottomColor: '#D3D3D3',
+    borderBottomWidth: 1,
+    paddingBottom: 10,
+  },
+  bottomBodyFixTextContainer: {
+    flexDirection: 'row',
+    marginLeft: 15,
+    width: 380,
+    justifyContent: 'space-between',
+  },
+  bottomBodyFixTextTitle: {
+    fontSize: 15,
+  },
+  bottomBodyFixTextCost: {
+    fontSize: 15,
+  },
+  //  Footer
+  //  bottom Footer
+  bottomFooterContainer: {
+    flexDirection: 'column',
+  },
+  //  Bottom Body Total
+  bottomBodyTextContainerShow: {
+    marginTop: 10,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    width: 395,
+    marginBottom: 10,
+  },
+  bottomBodyTotalTitle: {
+    fontSize: 16,
+    fontWeight: '700',
+    marginLeft: 15,
+  },
+  bottomBodyTotalText: {
+    fontSize: 15,
+  },
+  // Bottom footer call
+  bottomFooterButtonContainer: {
+    height: 50,
+    borderTopColor: '#D3D3D3',
+    borderTopWidth: 1,
+    paddingTop: 10,
+    paddingBottom: 10,
+  },
+  bottomFooterButtonContainerShow: {
+    borderTopColor: '#D3D3D3',
+    borderTopWidth: 1,
+    borderBottomColor: '#D3D3D3',
+    borderBottomWidth: 1,
+    paddingTop: 10,
+    paddingBottom: 10,
+  },
+  bottomFooterButtonCall: {
     borderWidth: 1,
     backgroundColor: '#3ae52b',
     borderColor: '#3ae52b',
     borderRadius: 10,
-    width: 300,
-    marginLeft: 15,
-    marginRight: 10,
+    width: '93%',
     height: 40,
     alignItems: 'center',
     justifyContent: 'center',
+    marginLeft: 15,
   },
-  cancelButtonImage: {
-    width: 40,
-    height: 40,
-  },
-  bottomBodyButtonCancel: {
+  // Bottom Footer Cancel
+  bottomFooterButtonCancel: {
     borderWidth: 1,
     backgroundColor: '#ff0000',
     borderColor: '#ff0000',
     borderRadius: 10,
-    width: 75,
+    width: '93%',
     height: 40,
     alignItems: 'center',
     justifyContent: 'center',
+    marginRight: 10,
+    marginLeft: 15,
+    marginTop: 10,
   },
-  bottomBodyButtonText: {
+  bottomFooterButtonText: {
     fontSize: 14,
     color: '#fff',
   },
