@@ -143,7 +143,7 @@ const DetailsFixer = ({content, cost}) => {
   return (
     <View style={styles.bottomBodyFixTextContainer}>
       <Text style={styles.bottomBodyFixTextTitle}>{content} </Text>
-      <Text style={styles.bottomBodyFixTextCost}>{cost}.000</Text>
+      <Text style={styles.bottomBodyFixTextCost}>{cost}.000 Đ</Text>
     </View>
   );
 };
@@ -299,7 +299,7 @@ const AcceptComponent = ({
           )}
           <View style={styles.bottomBodyTextContainerShow}>
             <Text style={styles.bottomBodyTotalTitle}>Tổng tiền:</Text>
-            <Text style={styles.bottomBodyTotalText}>{totalCost}.000</Text>
+            <Text style={styles.bottomBodyTotalText}>{totalCost}.000 Đ</Text>
           </View>
         </View>
         {/* Bottom Footer */}
@@ -310,7 +310,13 @@ const AcceptComponent = ({
                 ? styles.bottomFooterButtonContainerShow
                 : styles.bottomFooterButtonContainer
             }>
-            <TouchableOpacity style={styles.bottomFooterButtonCall}>
+            <TouchableOpacity
+              style={styles.bottomFooterButtonCall}
+              onPress={() => {
+                navigation.navigate('EvaluateComponent', {
+                  totalCost: totalCost,
+                });
+              }}>
               <FontAwesomeIcon icon={faPhoneAlt} color="#fff" size={20} />
             </TouchableOpacity>
           </View>

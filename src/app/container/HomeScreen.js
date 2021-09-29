@@ -9,6 +9,7 @@ import LocationComponent from '../components/fixInfoDetails/LocationComponent';
 import {getFocusedRouteNameFromRoute} from '@react-navigation/core';
 import SearchMapComponent from '../components/fixInfoDetails/SearchMapComponent';
 import WaitingMechanic from '../components/waitingMechanic';
+import EvaluateComponent from '../components/evaluate';
 
 const Stack = createStackNavigator();
 
@@ -20,7 +21,8 @@ const HomeScreen = ({navigation, route}) => {
       routeName === 'CurrentLocationComponent' ||
       routeName === 'CameraComponent' ||
       routeName === 'SearchMapComponent' ||
-      routeName === 'WaitingMechanicComponent'
+      routeName === 'WaitingMechanicComponent' ||
+      routeName === 'EvaluateComponent'
     ) {
       navigation.setOptions({
         tabBarStyle: {
@@ -53,6 +55,7 @@ const HomeScreen = ({navigation, route}) => {
         name="WaitingMechanicComponent"
         component={WaitingMechanic}
       />
+      <Stack.Screen name="EvaluateComponent" component={EvaluateComponent} />
     </Stack.Navigator>
   );
 };
