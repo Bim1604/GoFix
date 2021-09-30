@@ -22,10 +22,14 @@ import {
 import ava from '../../assets/image/mechanic.jpg';
 import {height} from '../../assets/base';
 
+const apiRequest =
+  'https://history-search-map.herokuapp.com/api/requestCustomer';
+
 const EvaluateComponent = ({navigation, route}) => {
   const [description, setDescription] = useState('');
   const [star, setStar] = useState();
-  const RateStarComponent = ({starValue}) => {
+  const [isStar, setIsStar] = useState(false);
+  const RateStarComponent = starValue => {
     switch (starValue) {
       case 1: {
         setStar(1);
@@ -49,6 +53,41 @@ const EvaluateComponent = ({navigation, route}) => {
       }
     }
   };
+
+  const PostAPIRequest = () => {
+    fetch(apiRequest, {
+      method: 'POST',
+      body: JSON.stringify({
+        description: description,
+        star: star,
+      }),
+      headers: {
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+    })
+      .then(response => response.json())
+      .then(data => {
+        console.log('Success:', data);
+      })
+      .catch(error => {
+        console.error('Error:', error);
+      });
+  }
+
+  const EvaluateStarComponent = starValue => {
+    if (isStar === false) {
+      setIsStar(true);
+      RateStarComponent(starValue);
+    }
+    if (isStar === true) {
+      if (star === starValue) {
+        setIsStar(false);
+      } else {
+        RateStarComponent(starValue);
+      }
+    }
+  };
+
   return (
     <View style={styles.container}>
       {/* Header */}
@@ -59,7 +98,7 @@ const EvaluateComponent = ({navigation, route}) => {
         <View style={styles.headerContainer}>
           <TouchableOpacity
             onPress={() => {
-              navigation.pop();
+              navigation.popToTop();
             }}>
             <FontAwesomeIcon
               style={styles.headerIconBack}
@@ -95,37 +134,57 @@ const EvaluateComponent = ({navigation, route}) => {
           <Text style={styles.bodyText}>cuốc xe này.</Text>
           {/* Star rate */}
           <View style={styles.bodyStarContainer}>
-            <TouchableOpacity>
+            <TouchableOpacity onPress={() => EvaluateStarComponent(1)}>
               <FontAwesomeIcon
-                style={styles.bodyStarIcon}
+                style={
+                  isStar === true && star === 1
+                    ? styles.bodyStarIconReady
+                    : styles.bodyStarIcon
+                }
                 icon={faSadCry}
                 size={35}
               />
             </TouchableOpacity>
-            <TouchableOpacity>
+            <TouchableOpacity onPress={() => EvaluateStarComponent(2)}>
               <FontAwesomeIcon
-                style={styles.bodyStarIcon}
+                style={
+                  isStar === true && star === 2
+                    ? styles.bodyStarIconReady
+                    : styles.bodyStarIcon
+                }
                 icon={faFrownOpen}
                 size={35}
               />
             </TouchableOpacity>
-            <TouchableOpacity>
+            <TouchableOpacity onPress={() => EvaluateStarComponent(3)}>
               <FontAwesomeIcon
-                style={styles.bodyStarIcon}
+                style={
+                  isStar === true && star === 3
+                    ? styles.bodyStarIconReady
+                    : styles.bodyStarIcon
+                }
                 icon={faSmile}
                 size={35}
               />
             </TouchableOpacity>
-            <TouchableOpacity>
+            <TouchableOpacity onPress={() => EvaluateStarComponent(4)}>
               <FontAwesomeIcon
-                style={styles.bodyStarIcon}
+                style={
+                  isStar === true && star === 4
+                    ? styles.bodyStarIconReady
+                    : styles.bodyStarIcon
+                }
                 icon={faLaughBeam}
                 size={35}
               />
             </TouchableOpacity>
-            <TouchableOpacity>
+            <TouchableOpacity onPress={() => EvaluateStarComponent(5)}>
               <FontAwesomeIcon
-                style={styles.bodyStarIcon}
+                style={
+                  isStar === true && star === 5
+                    ? styles.bodyStarIconReady
+                    : styles.bodyStarIcon
+                }
                 icon={faGrinSquintTears}
                 size={35}
               />
@@ -161,7 +220,12 @@ const EvaluateComponent = ({navigation, route}) => {
           start={{x: 0.0, y: 1.0}}
           end={{x: 1.0, y: 1.0}}
           style={styles.footerLinearGradient}>
-          <TouchableOpacity style={styles.bodyFooterButton}>
+          <TouchableOpacity
+            style={styles.bodyFooterButton}
+            onPress={() => {
+              PostAPIRequest();
+              navigation.popToTop();
+            }}>
             <Text style={styles.bodyFooterButtonText}>Gửi</Text>
           </TouchableOpacity>
         </LinearGradient>

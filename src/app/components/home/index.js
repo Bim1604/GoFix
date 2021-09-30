@@ -8,7 +8,7 @@ import BodyComponent from './Body';
 import HeaderComponent from './Header';
 
 
-const HomeComponent = ({navigation}) => {
+const HomeComponent = ({navigation, route}) => {
   return (
     <View style={stylesGeneral.default.container}>
       <ScrollView>

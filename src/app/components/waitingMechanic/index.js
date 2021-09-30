@@ -73,10 +73,12 @@ const WaitingMechanic = ({navigation, route}) => {
   }
 
   useEffect(() => {
-    setTimeout(() => {
-      setIsLoaded(true);
-    }, 3000);
-  }, []);
+    if (isLoaded === false) {
+      setTimeout(() => {
+        setIsLoaded(true);
+      }, 3000);
+    }
+  }, [isLoaded]);
 
   useEffect(() => {
     setLatitude(route.params.latitude);
@@ -117,9 +119,7 @@ const WaitingMechanic = ({navigation, route}) => {
           <TouchableOpacity
             style={styles.buttonCancel}
             onPress={() => {
-              navigation.navigate('FixInfoDetailsComponent', {
-                cancel: true,
-              });
+              navigation.pop();
             }}>
             <Text style={styles.cancelText}>Hủy tìm kiếm</Text>
           </TouchableOpacity>
