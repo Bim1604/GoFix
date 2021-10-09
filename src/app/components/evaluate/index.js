@@ -18,6 +18,7 @@ import {
   faSadCry,
   faSmile,
   faTimes,
+  faStar,
 } from '@fortawesome/free-solid-svg-icons';
 import ava from '../../assets/image/mechanic.jpg';
 import {height} from '../../assets/base';
@@ -137,44 +138,44 @@ const EvaluateComponent = ({navigation, route}) => {
             <TouchableOpacity onPress={() => EvaluateStarComponent(1)}>
               <FontAwesomeIcon
                 style={
-                  isStar === true && star === 1
+                  isStar === true && star >= 1
                     ? styles.bodyStarIconReady
                     : styles.bodyStarIcon
                 }
-                icon={faSadCry}
+                icon={faStar}
                 size={35}
               />
             </TouchableOpacity>
             <TouchableOpacity onPress={() => EvaluateStarComponent(2)}>
               <FontAwesomeIcon
                 style={
-                  isStar === true && star === 2
+                  isStar === true && star >= 2
                     ? styles.bodyStarIconReady
                     : styles.bodyStarIcon
                 }
-                icon={faFrownOpen}
+                icon={faStar}
                 size={35}
               />
             </TouchableOpacity>
             <TouchableOpacity onPress={() => EvaluateStarComponent(3)}>
               <FontAwesomeIcon
                 style={
-                  isStar === true && star === 3
+                  isStar === true && star >= 3
                     ? styles.bodyStarIconReady
                     : styles.bodyStarIcon
                 }
-                icon={faSmile}
+                icon={faStar}
                 size={35}
               />
             </TouchableOpacity>
             <TouchableOpacity onPress={() => EvaluateStarComponent(4)}>
               <FontAwesomeIcon
                 style={
-                  isStar === true && star === 4
+                  isStar === true && star >= 4
                     ? styles.bodyStarIconReady
                     : styles.bodyStarIcon
                 }
-                icon={faLaughBeam}
+                icon={faStar}
                 size={35}
               />
             </TouchableOpacity>
@@ -185,7 +186,7 @@ const EvaluateComponent = ({navigation, route}) => {
                     ? styles.bodyStarIconReady
                     : styles.bodyStarIcon
                 }
-                icon={faGrinSquintTears}
+                icon={faStar}
                 size={35}
               />
             </TouchableOpacity>
@@ -210,7 +211,7 @@ const EvaluateComponent = ({navigation, route}) => {
       {/* Footer */}
       <View style={styles.footerContainer}>
         <View style={styles.footerFeeContainer}>
-          <Text style={styles.bodyFooterText}>Tổng tiền</Text>
+          <Text style={styles.bodyFooterText}>Tổng chi phí sửa chửa</Text>
           <Text style={styles.bodyFooterText}>
             {route.params.totalCost}.000 Đ
           </Text>
