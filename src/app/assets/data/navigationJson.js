@@ -8,6 +8,7 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import {Dimensions} from 'react-native';
 import Logo from '../image/Logo.png';
+import ProfileScreen from '../../container/ProfileScreen';
 
 export function getWidth() {
   let width = Dimensions.get('window').width;
@@ -51,7 +52,7 @@ const data = [
   },
   {
     name: 'Cá Nhân',
-    component: HomeScreen,
+    component: ProfileScreen,
     fontSize: 12,
     icon: faUser,
     marginTop: 8,

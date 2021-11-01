@@ -21,6 +21,7 @@ const FixInfoDetailsComponent = ({navigation, route}) => {
   const [readyBugi, setReadyBugi] = useState(false);
   const [checkDescription, setCheckDescription] = useState(false);
   const [description, setDescription] = useState('');
+  const [descriptionDetails, setDescriptionDetails] = useState('');
   const scrollRef = useRef();
   const [address, setAddress] = useState();
   const [latitude, setLatitude] = useState();
@@ -82,6 +83,8 @@ const FixInfoDetailsComponent = ({navigation, route}) => {
             checkDescription={checkDescription}
             description={description}
             scrollRef={scrollRef}
+            descriptionDetails={descriptionDetails}
+            setDescriptionDetails={setDescriptionDetails}
           />
           <Text style={stylesBodyBase.default.bodyTitle}>Hình ảnh mô tả</Text>
           <ImageDescription navigation={navigation} />
@@ -89,6 +92,7 @@ const FixInfoDetailsComponent = ({navigation, route}) => {
       </ScrollView>
       <BottomView
         description={description}
+        descriptionDetails={descriptionDetails}
         readyBeBanh={readyBeBanh}
         readyBugi={readyBugi}
         readyChetMay={readyChetMay}

@@ -48,32 +48,9 @@ const BodyComponent = ({navigation}) => {
         <View style={stylesBody.default.bodyTextContainer}>
           <View>
             <Text style={stylesBody.default.bodyTextName}>
-              Subaru Impreza WRX STI RA Spec-C
+              Toyota Vios
             </Text>
-            <Text style={stylesBody.default.bodyTextNumber}>73B.263162</Text>
-          </View>
-        </View>
-      </TouchableOpacity>
-      <TouchableOpacity
-        style={stylesBody.default.bodyItemTouchable}
-        onPress={() => {
-          navigation.navigate('FixInfoDetailsComponent', {
-            motor: true,
-          });
-        }}>
-        <View style={stylesBody.default.bodyIconContainer}>
-          <FontAwesomeIcon
-            style={stylesBody.default.bodyIcon}
-            icon={faMotorcycle}
-            size={48}
-          />
-        </View>
-        <View style={stylesBody.default.bodyTextContainer}>
-          <View>
-            <Text style={stylesBody.default.bodyTextName}>
-              Subaru Impreza WRX STI RA Spec-C
-            </Text>
-            <Text style={stylesBody.default.bodyTextNumber}>73B.263162</Text>
+            <Text style={stylesBody.default.bodyTextNumber}>73B.283342</Text>
           </View>
         </View>
       </TouchableOpacity>

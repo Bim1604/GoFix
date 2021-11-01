@@ -7,6 +7,7 @@ import {stylesBottom} from '../../styles/fixInfoDetails/index';
 
 const BottomView = ({
   description,
+  descriptionDetails,
   readyHetBinh,
   readyLopXe,
   readyBeBanh,

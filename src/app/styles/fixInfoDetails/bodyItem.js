@@ -59,6 +59,7 @@ const stylesBodyItem = StyleSheet.create({
     borderColor: '#f7f7f7',
     minHeight: 70,
     textAlignVertical: 'top',
+    marginBottom: 15,
   },
   // Body Image description
   bodyImageDesContainer: {
