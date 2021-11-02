@@ -1,12 +1,34 @@
 /* eslint-disable prettier/prettier */
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {faChevronRight, faPencilAlt} from '@fortawesome/free-solid-svg-icons';
 import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
 import {View, Text, StyleSheet, Image, TouchableOpacity} from 'react-native';
 import {height, width} from '../../assets/base';
-import avatar from '../../assets/image/mechanic.jpg';
 import LinearGradient from 'react-native-linear-gradient';
+
+const apiUser = 'https://history-search-map.herokuapp.com/api/user';
+
 const ProfileComponent = ({route, navigation}) => {
+  const [data, setData] = useState({
+    fullName: '',
+    avatar:
+      'https://static2.yan.vn/YanNews/2167221/202003/dan-mang-du-trend-thiet-ke-avatar-du-kieu-day-mau-sac-tu-anh-mac-dinh-f4781c7a.jpg',
+    gender: '',
+    DOB: '',
+    phone: '',
+    password: '',
+  });
+  useEffect(() => {
+    fetch(apiUser)
+      .then(res => res.json())
+      .then(json => {
+        for (let index = 0; index < json.length; index++) {
+          if (route.params.phone === json[index].phone) {
+            setData(json[index]);
+          }
+        }
+      });
+  }, [route.params.phone]);
   return (
     <View>
       {/* Header */}
@@ -24,13 +46,19 @@ const ProfileComponent = ({route, navigation}) => {
         {/* ava */}
         <View style={styles.bodyUserNavContainer}>
           <View style={styles.bodyUserNavImageContainer}>
-            <Image source={avatar} style={styles.bodyUserNavImage} />
-            <Text style={styles.bodyUserNavText}>{route.params.fullName}</Text>
+            <Image
+              source={{uri: data.avatar}}
+              style={styles.bodyUserNavImage}
+            />
+            <Text style={styles.bodyUserNavText}>{data.fullName}</Text>
             <TouchableOpacity
               onPress={() => {
                 navigation.navigate('InfoUpdateComponent', {
-                  fullName: route.params.fullName,
-                  phone: route.params.phone,
+                  fullName: data.fullName,
+                  phone: data.phone,
+                  gender: data.gender,
+                  DOB: data.DOB,
+                  avatar: data.avatar,
                 });
               }}
               style={styles.bodyUserEditContainer}>
@@ -40,7 +68,17 @@ const ProfileComponent = ({route, navigation}) => {
           </View>
         </View>
         {/* details info user*/}
-        <TouchableOpacity style={styles.bodyInfoContainer}>
+        <TouchableOpacity
+          onPress={() => {
+            navigation.navigate('InfoDetailsComponent', {
+              fullName: data.fullName,
+              phone: data.phone,
+              gender: data.gender,
+              DOB: data.DOB,
+              avatar: data.avatar,
+            });
+          }}
+          style={styles.bodyInfoContainer}>
           <Text style={styles.bodyInfoText}>Thông tin cá nhân</Text>
           <FontAwesomeIcon
             style={styles.bodyInfoIcon}
@@ -49,7 +87,13 @@ const ProfileComponent = ({route, navigation}) => {
           />
         </TouchableOpacity>
         {/* details info vehicle*/}
-        <TouchableOpacity style={styles.bodyInfoContainer}>
+        <TouchableOpacity
+          onPress={() => {
+            navigation.navigate('VehicleDetailsComponent', {
+              phone: data.phone,
+            });
+          }}
+          style={styles.bodyInfoContainer}>
           <Text style={styles.bodyInfoText}>Thông tin xe</Text>
           <FontAwesomeIcon
             style={styles.bodyInfoIcon}
@@ -58,7 +102,11 @@ const ProfileComponent = ({route, navigation}) => {
           />
         </TouchableOpacity>
         {/* Logout */}
-        <TouchableOpacity style={styles.bodyInfoContainer}>
+        <TouchableOpacity
+          onPress={() => {
+            route.params.setFullName('');
+          }}
+          style={styles.bodyInfoContainer}>
           <Text style={styles.bodyLogoutText}>Đăng xuất</Text>
         </TouchableOpacity>
       </View>

@@ -8,9 +8,7 @@ export default function Bottom({navigation}) {
     <TouchableOpacity
       style={stylesBody.default.buttonStyle}
       onPress={() => {
-        navigation.navigate('FixInfoDetailsComponent', {
-          motor: true,
-        });
+        navigation.navigate('VehicleAddComponent');
       }}>
       <Text style={stylesBody.default.buttonTextStyle}>+</Text>
     </TouchableOpacity>

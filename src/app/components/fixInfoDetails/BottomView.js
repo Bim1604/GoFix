@@ -19,6 +19,9 @@ const BottomView = ({
   lng,
   address,
   city,
+  phone,
+  cate,
+  name,
 }) => {
   return (
     <View>
@@ -70,6 +73,9 @@ const BottomView = ({
                 hopSo: readyTooHot ? 'Lỗi hộp số' : '',
                 chetMay: readyChetMay ? 'Xe chết máy' : '',
                 description: description !== '' ? description : '',
+                phone: phone,
+                cate: cate,
+                name: name,
               });
             }
           }}>

@@ -8,9 +8,13 @@ import stylesNav from '../styles/route/tabNav';
 import LoginScreen from '../components/auth/Login';
 
 const Tab = createBottomTabNavigator();
+import {YellowBox} from 'react-native';
 
+YellowBox.ignoreWarnings([
+  'Non-serializable values were found in the navigation state',
+]);
 const Router = ({navigation}) => {
-  const [fullName, setFullName] = useState('Trần Đại Đăng');
+  const [fullName, setFullName] = useState('');
   const [phone, setPhone] = useState('0364909656');
   if (fullName === '') {
     return (
@@ -29,7 +33,11 @@ const Router = ({navigation}) => {
         }}>
         {data.map((item, index) => (
           <Tab.Screen
-            initialParams={{fullName: fullName, phone: phone}}
+            initialParams={{
+              fullName: fullName,
+              phone: phone,
+              setFullName: setFullName,
+            }}
             name={item.name}
             component={item.component}
             options={{

@@ -6,7 +6,7 @@ import {
   faMotorcycle,
 } from '@fortawesome/free-solid-svg-icons';
 import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
-import React from 'react';
+import React, { useState } from 'react';
 import {View, Text} from 'react-native';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import {
@@ -15,6 +15,9 @@ import {
 } from '../../styles/fixInfoDetails/index';
 
 const BodyBase = ({navigation, route, address, latitude, longitude, city}) => {
+  const [cate, setCate] = useState(route.params.cate);
+  const [name, setName] = useState(route.params.name);
+  const [number, setNumber] = useState(route.params.number);
   return (
     <View>
       <Text style={stylesBodyBase.default.bodyTitle}>Vị trí hiện tại</Text>
@@ -62,20 +65,20 @@ const BodyBase = ({navigation, route, address, latitude, longitude, city}) => {
           <View style={stylesBodyBase.default.bodyAddressIconContainer}>
             <FontAwesomeIcon
               style={stylesBodyBase.default.bodyAddressIcon}
-              icon={route.params.motor ? faMotorcycle : faCar}
+              icon={cate === 'Xe máy' ? faMotorcycle : faCar}
               size={32}
             />
           </View>
           <View>
             <View style={stylesBodyItem.default.bodyMotorNameContainer}>
               <Text style={stylesBodyItem.default.bodyMotorNameText}>
-                {route.params.motor ? 'Subaru Impreza WRX STI RA Spec-C (Đỏ, đen)' : 'Toyota Vios'}
+                {name}
               </Text>
             </View>
             <View style={stylesBodyItem.default.bodyMotorDetailContainer}>
               <Text style={stylesBodyItem.default.bodyMotorNumberText}>
                 {'  '}
-                {route.params.motor ? '73B.263162' : '73B.283342'}
+                {number}
               </Text>
             </View>
           </View>

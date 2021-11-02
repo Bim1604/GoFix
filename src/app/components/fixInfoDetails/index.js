@@ -27,7 +27,9 @@ const FixInfoDetailsComponent = ({navigation, route}) => {
   const [latitude, setLatitude] = useState();
   const [longitude, setLongitude] = useState();
   const [city, setCity] = useState();
-
+  const [phone, setPhone] = useState(route.params.phone);
+  const [cate, setCate] = useState(route.params.cate);
+  const [name, setName] = useState(route.params.name);
   useEffect(() => {
     setAddress(route.params.address);
     setLatitude(route.params.lat);
@@ -68,8 +70,8 @@ const FixInfoDetailsComponent = ({navigation, route}) => {
             city={city}
             latitude={latitude}
             longitude={longitude}
-            route={route}
             navigation={navigation}
+            route={route}
           />
           <BodyFormItem
             setCheckDescription={setCheckDescription}
@@ -104,6 +106,9 @@ const FixInfoDetailsComponent = ({navigation, route}) => {
         lng={longitude}
         address={address}
         city={city}
+        phone={phone}
+        cate={cate}
+        name={name}
       />
     </View>
   );

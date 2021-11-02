@@ -9,6 +9,7 @@ import {
 import {Dimensions} from 'react-native';
 import Logo from '../image/Logo.png';
 import ProfileScreen from '../../container/ProfileScreen';
+import HistoryScreen from '../../container/HistoryScreen';
 
 export function getWidth() {
   let width = Dimensions.get('window').width;
@@ -23,24 +24,20 @@ const data = [
     fontSize: 12,
     icon: faHome,
     marginTop: 8,
-    toValue: 0,
   },
   {
     name: 'Lich sử',
-    component: HomeScreen,
+    component: HistoryScreen,
     fontSize: 12,
     icon: faHistory,
     marginTop: 8,
-    toValue: getWidth() * 1.2,
   },
   {
     name: 'GoFix',
-    component: HomeScreen,
+    component: HistoryScreen,
     fontSize: 14,
-    icon: faHistory,
     image: Logo,
     marginTop: 8,
-    toValue: 0,
   },
   {
     name: 'Thông Báo',
@@ -56,7 +53,6 @@ const data = [
     fontSize: 12,
     icon: faUser,
     marginTop: 8,
-    toValue: getWidth() * 4.8,
   },
 ];
 

@@ -10,7 +10,7 @@ import {getFocusedRouteNameFromRoute} from '@react-navigation/core';
 import SearchMapComponent from '../components/fixInfoDetails/SearchMapComponent';
 import WaitingMechanic from '../components/waitingMechanic';
 import EvaluateComponent from '../components/evaluate';
-
+import VehicleAddComponent from '../components/profile/VehicleAdd';
 const Stack = createStackNavigator();
 
 const HomeScreen = ({navigation, route}) => {
@@ -22,7 +22,8 @@ const HomeScreen = ({navigation, route}) => {
       routeName === 'CameraComponent' ||
       routeName === 'SearchMapComponent' ||
       routeName === 'WaitingMechanicComponent' ||
-      routeName === 'EvaluateComponent'
+      routeName === 'EvaluateComponent' ||
+      routeName === 'VehicleAddComponent'
     ) {
       navigation.setOptions({
         tabBarStyle: {
@@ -39,7 +40,15 @@ const HomeScreen = ({navigation, route}) => {
   }, [navigation, route]);
   return (
     <Stack.Navigator screenOptions={{headerShown: false}}>
-      <Stack.Screen name="HomeComponent" component={HomeComponent} />
+      <Stack.Screen
+        initialParams={{
+          fullName: route.params.fullName,
+          phone: route.params.phone,
+          setFullName: route.params.setFullName,
+        }}
+        name="HomeComponent"
+        component={HomeComponent}
+      />
       <Stack.Screen name="FixInfoComponent" component={FixInfoComponent} />
       <Stack.Screen
         name="FixInfoDetailsComponent"
@@ -54,6 +63,10 @@ const HomeScreen = ({navigation, route}) => {
       <Stack.Screen
         name="WaitingMechanicComponent"
         component={WaitingMechanic}
+      />
+      <Stack.Screen
+        name="VehicleAddComponent"
+        component={VehicleAddComponent}
       />
       <Stack.Screen name="EvaluateComponent" component={EvaluateComponent} />
     </Stack.Navigator>

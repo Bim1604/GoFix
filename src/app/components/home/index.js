@@ -17,7 +17,7 @@ const HomeComponent = ({navigation, route}) => {
         {/* Quang cao */}
         <AdvertisementComponent />
         {/* Main Home */}
-        <BodyComponent navigation={navigation} />
+        <BodyComponent route={route} navigation={navigation} />
       </ScrollView>
     </View>
   );

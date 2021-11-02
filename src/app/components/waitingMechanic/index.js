@@ -5,7 +5,6 @@ import {FlatList, TouchableOpacity} from 'react-native-gesture-handler';
 import {height, width} from '../../assets/base';
 import MapView, {Marker} from 'react-native-maps';
 import mechanic from '../../assets/image/XeMay2.png';
-import avatar from '../../assets/image/mechanic.jpg';
 import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
 import {
   faAngleDoubleDown,
@@ -15,6 +14,9 @@ import {
   faUser,
   faWrench,
 } from '@fortawesome/free-solid-svg-icons';
+
+const apiUser = 'https://history-search-map.herokuapp.com/api/historyCustomer';
+
 const WaitingMechanic = ({navigation, route}) => {
   const [isLoaded, setIsLoaded] = useState(false);
   const [latitude, setLatitude] = useState();
@@ -27,7 +29,28 @@ const WaitingMechanic = ({navigation, route}) => {
   const [readyBugi, setReadyBugi] = useState('');
   const [description, setDescription] = useState('');
   const [totalCost, setTotalCost] = useState();
+  const [dataMechanic, setDataMechanic] = useState({
+    fullName: '',
+    avatar:
+      'https://static2.yan.vn/YanNews/2167221/202003/dan-mang-du-trend-thiet-ke-avatar-du-kieu-day-mau-sac-tu-anh-mac-dinh-f4781c7a.jpg',
+    gender: '',
+    DOB: '',
+    phone: '',
+    password: '',
+  });
+  useEffect(() => {
+    fetch(apiUser)
+      .then(res => res.json())
+      .then(json => {
+        for (let index = 0; index < json.length; index++) {
+          if (route.params.phone === json[index].phone) {
+            setDataMechanic(json[index]);
+          }
+        }
+      });
+  }, [route.params.phone]);
   let total = 0;
+  let detailsFixer = [];
   const data = [
     {
       content: readyHetBinh,
@@ -69,9 +92,9 @@ const WaitingMechanic = ({navigation, route}) => {
   for (let index = 0; index < data.length; index++) {
     if (data[index].isChoose === true) {
       total = total + data[index].cost;
+      detailsFixer.push(data[index].content);
     }
   }
-
   useEffect(() => {
     if (isLoaded === false) {
       setTimeout(() => {
@@ -133,6 +156,10 @@ const WaitingMechanic = ({navigation, route}) => {
           address={route.params.address}
           data={data}
           totalCost={totalCost}
+          detailsFix={detailsFixer}
+          dataMechanic={dataMechanic}
+          cate={route.params.cate}
+          name={route.params.name}
         />
       )}
     </View>
@@ -156,6 +183,10 @@ const AcceptComponent = ({
   city,
   data,
   totalCost,
+  detailsFix,
+  dataMechanic,
+  cate,
+  name,
 }) => {
   const [latAverage, setLatAverage] = useState(1);
   const [lngAverage, setLngAverage] = useState(1);
@@ -183,17 +214,19 @@ const AcceptComponent = ({
       setLngAverage(lngUser + (lngMechanic - lngUser) / 2);
     }
   }, [latMechanic, latUser, lngMechanic, lngUser]);
-
+  console.log(dataMechanic);
   let renderItem = ({item, index}) => {
     if (item.isChoose === false) {
       return;
     }
+
     return (
       <View>
         <DetailsFixer content={item.content} cost={item.cost} />
       </View>
     );
   };
+
   return (
     <View style={styles.mapContainer}>
       <MapView
@@ -245,6 +278,7 @@ const AcceptComponent = ({
               ? styles.bottomBodyContainerShow
               : styles.bottomBodyContainer
           }>
+          {/* Mechanic info */}
           <View style={styles.bottomBodyTitleTextContainer}>
             <FontAwesomeIcon
               style={styles.bottomBodyIcon}
@@ -255,14 +289,24 @@ const AcceptComponent = ({
           </View>
           <View style={styles.bottomBodyUserContainer}>
             <View style={styles.bottomBodyImageContainer}>
-              <Image source={avatar} style={styles.bottomBodyImage} />
+              <Image
+                source={{
+                  uri:
+                    dataMechanic.avatar === undefined
+                      ? 'https://static2.yan.vn/YanNews/2167221/202003/dan-mang-du-trend-thiet-ke-avatar-du-kieu-day-mau-sac-tu-anh-mac-dinh-f4781c7a.jpg'
+                      : dataMechanic.avatar,
+                }}
+                style={styles.bottomBodyImage}
+              />
             </View>
             <View style={styles.bottomBodyTextContainer}>
               <View style={styles.bottomBodyTitleContainer}>
-                <Text style={styles.bottomBodyTextName}>Trần Thị Vi</Text>
-                <Text style={styles.bottomBodyText}>0971547522</Text>
+                <Text style={styles.bottomBodyTextName}>
+                  {dataMechanic.name}
+                </Text>
+                <Text style={styles.bottomBodyText}>{dataMechanic.phone}</Text>
                 <Text style={styles.bottomBodyText}>
-                  123 Lê Văn Việt, quận 9, thành phố Hồ Chí Minh
+                  {dataMechanic.address}
                 </Text>
               </View>
             </View>
@@ -314,7 +358,14 @@ const AcceptComponent = ({
               style={styles.bottomFooterButtonCall}
               onPress={() => {
                 navigation.navigate('EvaluateComponent', {
-                  totalCost: totalCost,
+                  price: totalCost,
+                  name: dataMechanic.name,
+                  phone: dataMechanic.phone,
+                  detailsFix: detailsFix,
+                  avatar: dataMechanic.avatar,
+                  address: address,
+                  cate: cate,
+                  vehicleName: name,
                 });
               }}>
               <FontAwesomeIcon icon={faPhoneAlt} color="#fff" size={20} />

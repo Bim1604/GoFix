@@ -10,7 +10,7 @@ import {
   StyleSheet,
   Dimensions,
 } from 'react-native';
-import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
+import {launchCamera} from 'react-native-image-picker';
 import LinearGradient from 'react-native-linear-gradient';
 import {stylesHeader} from '../../styles/fixInfo';
 const width = Dimensions.get('window').width;
@@ -68,35 +68,6 @@ const ImagePicker = ({navigation}) => {
             );
           }}>
           <Text>Take Photo</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          onPress={async () => {
-            await launchCamera(
-              {
-                mediaType: 'video',
-                videoQuality: 'high',
-                saveToPhotos: true,
-                durationLimit: 15,
-              },
-              res => {
-              },
-            );
-          }}>
-          <Text>Video Record</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          onPress={async () => {
-            await launchImageLibrary(options, res => {
-              if (res.assets) {
-                setPhoto(res.assets);
-                console.log('User assets picture');
-              } else if (res.didCancel) {
-                console.log('User cancel pick picture');
-              } else if (res.errorCode) {
-              }
-            });
-          }}>
-          <Text>Choose Photo</Text>
         </TouchableOpacity>
       </View>
       <Image source={photo} style={styles.image} />

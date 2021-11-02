@@ -22,7 +22,7 @@ const ImageDescription = ({navigation}) => {
           </View>
           <View>
             <Text style={stylesBodyItem.default.bodyImageDesText}>
-              Chụp ảnh / quay video
+              Chụp ảnh
             </Text>
           </View>
         </TouchableOpacity>

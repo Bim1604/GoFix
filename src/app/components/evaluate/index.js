@@ -1,5 +1,5 @@
 /* eslint-disable prettier/prettier */
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   Image,
   StyleSheet,
@@ -25,11 +25,13 @@ import {height} from '../../assets/base';
 
 const apiRequest =
   'https://history-search-map.herokuapp.com/api/requestCustomer';
-
+const apiHistoryCus =
+  'https://history-search-map.herokuapp.com/api/historyCustomer';
 const EvaluateComponent = ({navigation, route}) => {
   const [description, setDescription] = useState('');
   const [star, setStar] = useState();
   const [isStar, setIsStar] = useState(false);
+  const [time, setTime] = useState('');
   const RateStarComponent = starValue => {
     switch (starValue) {
       case 1: {
@@ -54,6 +56,53 @@ const EvaluateComponent = ({navigation, route}) => {
       }
     }
   };
+  const getCurrentDate = () => {
+    var date = new Date().getDate();
+    var month = new Date().getMonth() + 1;
+    var year = new Date().getFullYear();
+    return date + '-' + month + '-' + year;
+  };
+  const getCurrentTime = () => {
+    var hour = new Date().getHours();
+    var minutes = new Date().getMinutes();
+    var seconds = new Date().getSeconds();
+    return hour + ':' + minutes + ':' + seconds;
+  };
+  useEffect(() => {
+    var date = getCurrentDate();
+    var timeCurrent = getCurrentTime();
+    setTime(timeCurrent + ' ' + date);
+  }, []);
+
+  const PostAPIHistoryCus = () => {
+    fetch(apiHistoryCus, {
+      method: 'POST',
+      body: JSON.stringify({
+        name: route.params.name,
+        avatar: route.params.avatar,
+        phone: route.params.phone,
+        address: route.params.address,
+        detailsFix: route.params.detailsFix,
+        time: time,
+        price: route.params.totalCost,
+        status: true,
+        motor: route.params.cate !== 'Xe máy' ? '' : route.params.vehicleName,
+        car: route.params.cate === 'Xe máy' ? '' : route.params.vehicleName,
+        description: description,
+        reasonCancel: '',
+      }),
+      headers: {
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+    })
+      .then(response => response.json())
+      .then(data => {
+        console.log('Success:', data);
+      })
+      .catch(error => {
+        console.error('Error:', error);
+      });
+  };
 
   const PostAPIRequest = () => {
     fetch(apiRequest, {
@@ -73,7 +122,7 @@ const EvaluateComponent = ({navigation, route}) => {
       .catch(error => {
         console.error('Error:', error);
       });
-  }
+  };
 
   const EvaluateStarComponent = starValue => {
     if (isStar === false) {
@@ -99,6 +148,7 @@ const EvaluateComponent = ({navigation, route}) => {
         <View style={styles.headerContainer}>
           <TouchableOpacity
             onPress={() => {
+              PostAPIHistoryCus();
               navigation.popToTop();
             }}>
             <FontAwesomeIcon
@@ -122,7 +172,7 @@ const EvaluateComponent = ({navigation, route}) => {
       <View style={styles.bodyContainer}>
         {/* Image */}
         <View style={styles.bodyImageContainer}>
-          <Image source={ava} style={styles.bodyImage} />
+          <Image source={{uri: route.params.avatar}} style={styles.bodyImage} />
         </View>
         <View style={styles.bodyTextContainer}>
           <Text style={styles.bodyTextTitle}>
@@ -213,7 +263,7 @@ const EvaluateComponent = ({navigation, route}) => {
         <View style={styles.footerFeeContainer}>
           <Text style={styles.bodyFooterText}>Tổng chi phí sửa chửa</Text>
           <Text style={styles.bodyFooterText}>
-            {route.params.totalCost}.000 Đ
+            {route.params.price}.000 Đ
           </Text>
         </View>
         <LinearGradient
@@ -225,6 +275,7 @@ const EvaluateComponent = ({navigation, route}) => {
             style={styles.bodyFooterButton}
             onPress={() => {
               PostAPIRequest();
+              PostAPIHistoryCus();
               navigation.popToTop();
             }}>
             <Text style={styles.bodyFooterButtonText}>Gửi</Text>
