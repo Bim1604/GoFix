@@ -1,11 +1,11 @@
 /* eslint-disable prettier/prettier */
 import {StyleSheet} from 'react-native';
-import {height} from '../../assets/base';
+import {width, height} from '../../assets/base';
 const stylesSwiper = StyleSheet.create({
   //Header swiper
   headerWrap: {
-    height: 200,
-    width: 370,
+    height: height / 4.5,
+    width: width / 1.13,
     marginLeft: 21,
     bottom: height / 5.8,
   },

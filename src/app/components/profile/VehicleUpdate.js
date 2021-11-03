@@ -18,7 +18,6 @@ const VehicleUpdateComponent = ({navigation, route}) => {
   const [name, setName] = useState(route.params.name);
   const [number, setNumber] = useState(route.params.number);
   const [color, setColor] = useState(route.params.color);
-  console.log(route);
   const UpdateAPIVehicle = async () => {
     await fetch(
       `https://history-search-map.herokuapp.com/api/vehicle/${route.params.id}`,

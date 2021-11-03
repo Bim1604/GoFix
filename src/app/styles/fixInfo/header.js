@@ -10,7 +10,8 @@ const stylesHeader = StyleSheet.create({
   headerContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    height: height / 12,
+    alignItems: 'center',
+    height: height / 9,
   },
   headerIconBack: {
     color: '#fff',
@@ -20,7 +21,6 @@ const stylesHeader = StyleSheet.create({
     fontSize: 18,
     fontWeight: '700',
     color: '#fff',
-    margin: 24,
   },
   headerIconMessage: {
     color: '#fff',

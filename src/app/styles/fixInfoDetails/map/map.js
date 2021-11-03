@@ -14,7 +14,7 @@ const stylesMap = StyleSheet.create({
   // header
   headerMap: {
     flexDirection: 'row',
-    bottom: 815,
+    bottom: height,
     marginLeft: 11,
   },
   headerTextInputContainer: {

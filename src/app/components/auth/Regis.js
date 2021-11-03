@@ -204,6 +204,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     paddingLeft: 15,
     height: height / 20,
+    fontSize: 12,
   },
   //   Button
   bodyRegisButton: {
