@@ -21,12 +21,15 @@ const FixInfoDetailsComponent = ({navigation, route}) => {
   const [readyBugi, setReadyBugi] = useState(false);
   const [checkDescription, setCheckDescription] = useState(false);
   const [description, setDescription] = useState('');
+  const [descriptionDetails, setDescriptionDetails] = useState('');
   const scrollRef = useRef();
   const [address, setAddress] = useState();
   const [latitude, setLatitude] = useState();
   const [longitude, setLongitude] = useState();
   const [city, setCity] = useState();
-
+  const [cate, setCate] = useState(route.params.cate);
+  const [name, setName] = useState(route.params.name);
+  const [id, setID] = useState(route.params.id);
   useEffect(() => {
     setAddress(route.params.address);
     setLatitude(route.params.lat);
@@ -67,8 +70,8 @@ const FixInfoDetailsComponent = ({navigation, route}) => {
             city={city}
             latitude={latitude}
             longitude={longitude}
-            route={route}
             navigation={navigation}
+            route={route}
           />
           <BodyFormItem
             setCheckDescription={setCheckDescription}
@@ -82,6 +85,8 @@ const FixInfoDetailsComponent = ({navigation, route}) => {
             checkDescription={checkDescription}
             description={description}
             scrollRef={scrollRef}
+            descriptionDetails={descriptionDetails}
+            setDescriptionDetails={setDescriptionDetails}
           />
           <Text style={stylesBodyBase.default.bodyTitle}>Hình ảnh mô tả</Text>
           <ImageDescription navigation={navigation} />
@@ -89,6 +94,7 @@ const FixInfoDetailsComponent = ({navigation, route}) => {
       </ScrollView>
       <BottomView
         description={description}
+        descriptionDetails={descriptionDetails}
         readyBeBanh={readyBeBanh}
         readyBugi={readyBugi}
         readyChetMay={readyChetMay}
@@ -100,6 +106,9 @@ const FixInfoDetailsComponent = ({navigation, route}) => {
         lng={longitude}
         address={address}
         city={city}
+        cate={cate}
+        name={name}
+        id={route.params.id}
       />
     </View>
   );

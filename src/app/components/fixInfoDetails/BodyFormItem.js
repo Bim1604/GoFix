@@ -16,7 +16,9 @@ const BodyFormItem = ({
   setReadyBugi,
   setReadyChetMay,
   setCheckDescription,
+  setDescriptionDetails,
   checkDescription,
+  descriptionDetails,
   setDescription,
   description,
   scrollRef,
@@ -105,6 +107,24 @@ const BodyFormItem = ({
           ) : (
             <View />
           )}
+          <View style={{marginBottom: 10}}>
+            <Text style={{color: '#A9A9A9'}}>Mô tả chi tiết</Text>
+          </View>
+          <TextInput
+            multiline={true}
+            style={stylesBodyItem.default.bodyCheckBoxContent}
+            onChangeText={setDescriptionDetails}
+            value={descriptionDetails}
+            onChange={text => setDescriptionDetails(text)}
+            onPressIn={() => {
+              scrollRef.current.scrollTo({
+                x: 355,
+                y: 355,
+                animated: true,
+              });
+            }}
+            placeholder="Nhập để mô tả vấn đề của bạn"
+          />
         </View>
       </View>
     </View>

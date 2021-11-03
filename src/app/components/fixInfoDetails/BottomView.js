@@ -7,6 +7,7 @@ import {stylesBottom} from '../../styles/fixInfoDetails/index';
 
 const BottomView = ({
   description,
+  descriptionDetails,
   readyHetBinh,
   readyLopXe,
   readyBeBanh,
@@ -18,6 +19,10 @@ const BottomView = ({
   lng,
   address,
   city,
+  phone,
+  cate,
+  name,
+  id,
 }) => {
   return (
     <View>
@@ -69,6 +74,10 @@ const BottomView = ({
                 hopSo: readyTooHot ? 'Lỗi hộp số' : '',
                 chetMay: readyChetMay ? 'Xe chết máy' : '',
                 description: description !== '' ? description : '',
+                phone: phone,
+                cate: cate,
+                name: name,
+                id: id,
               });
             }
           }}>
