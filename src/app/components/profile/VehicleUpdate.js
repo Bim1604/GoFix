@@ -18,6 +18,27 @@ const VehicleUpdateComponent = ({navigation, route}) => {
   const [name, setName] = useState(route.params.name);
   const [number, setNumber] = useState(route.params.number);
   const [color, setColor] = useState(route.params.color);
+  console.log(route);
+  const UpdateAPIVehicle = async () => {
+    await fetch(
+      `https://history-search-map.herokuapp.com/api/vehicle/${route.params.id}`,
+      {
+        method: 'PATCH',
+        headers: {'Content-type': 'application/json'},
+        body: JSON.stringify({
+          cate: cate,
+          name: name,
+          number: number,
+          color: color,
+          userID: route.params.userID,
+        }),
+      },
+    )
+      .then(response => {
+        return response.json();
+      })
+      .then(success => console.log(success));
+  };
 
   return (
     <View style={styles.container}>
@@ -114,9 +135,10 @@ const VehicleUpdateComponent = ({navigation, route}) => {
       {/*  Button update  */}
       <TouchableOpacity
         onPress={() => {
-          // put api
+          UpdateAPIVehicle();
           navigation.navigate('VehicleDetailsComponent', {
-            phone: route.params.phone,
+            id: route.params.userID,
+            result: 1,
           });
         }}
         style={styles.bodyInfoUpdateContainer}>

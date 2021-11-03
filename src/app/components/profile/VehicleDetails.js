@@ -15,6 +15,7 @@ const apiVehicle = 'https://history-search-map.herokuapp.com/api/vehicle';
 const VehicleDetailsComponent = ({navigation, route}) => {
   const [data, setData] = useState([
     {
+      id: '',
       cate: '',
       name: '',
       number: '',
@@ -34,8 +35,8 @@ const VehicleDetailsComponent = ({navigation, route}) => {
         }
         setData(vehicleItem);
       });
-  }, [route.params.id]);
-  const ItemVehicle = ({cate, name, number, color}) => {
+  }, [route.params]);
+  const ItemVehicle = ({cate, name, number, color, id}) => {
     return (
       <TouchableOpacity
         style={styles.bodyItemTouchable}
@@ -45,7 +46,8 @@ const VehicleDetailsComponent = ({navigation, route}) => {
             cate: cate,
             number: number,
             color: color,
-            phone: route.params.phone,
+            userID: route.params.id,
+            id: id,
           });
         }}>
         <View style={styles.bodyIconContainer}>
@@ -93,6 +95,7 @@ const VehicleDetailsComponent = ({navigation, route}) => {
             number={item.number}
             color={item.color}
             key={index}
+            id={item.id}
           />
         ))}
       </View>
