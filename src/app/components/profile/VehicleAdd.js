@@ -1,8 +1,5 @@
 /* eslint-disable prettier/prettier */
-import {
-  faChevronLeft,
-  faStarOfLife,
-} from '@fortawesome/free-solid-svg-icons';
+import {faChevronLeft, faStarOfLife} from '@fortawesome/free-solid-svg-icons';
 import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
 import React, {useState} from 'react';
 import {
@@ -15,12 +12,35 @@ import {
 import LinearGradient from 'react-native-linear-gradient';
 import {height, width} from '../../assets/base';
 import {Picker} from '@react-native-picker/picker';
-
-const VehicleAddComponent = ({navigation}) => {
-  const [cate, setCate] = useState('');
+const apiVehicle = 'https://history-search-map.herokuapp.com/api/vehicle';
+const VehicleAddComponent = ({navigation, route}) => {
+  const [cate, setCate] = useState('Xe máy');
   const [name, setName] = useState('');
   const [number, setNumber] = useState('');
   const [color, setColor] = useState('');
+
+  const VehicleAdd = () => {
+    fetch(apiVehicle, {
+      method: 'POST',
+      body: JSON.stringify({
+        cate: cate,
+        name: name,
+        number: number,
+        color: color,
+        userID: route.params.id,
+      }),
+      headers: {
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+    })
+      .then(response => response.json())
+      .then(data => {
+        console.log('Success:', data);
+      })
+      .catch(error => {
+        console.error('Error:', error);
+      });
+  };
 
   return (
     <View style={styles.container}>
@@ -117,8 +137,11 @@ const VehicleAddComponent = ({navigation}) => {
       {/*  Button Add  */}
       <TouchableOpacity
         onPress={() => {
-          // Post api
-          navigation.pop();
+          VehicleAdd();
+          navigation.navigate('FixInfoComponent', {
+            id: route.params.id,
+            result: 1,
+          });
         }}
         style={styles.bodyInfoUpdateContainer}>
         <Text style={styles.bodyInfoUpdateText}>Lưu thông tin xe</Text>

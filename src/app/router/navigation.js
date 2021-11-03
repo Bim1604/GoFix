@@ -16,11 +16,13 @@ YellowBox.ignoreWarnings([
 const Router = ({navigation}) => {
   const [fullName, setFullName] = useState('');
   const [phone, setPhone] = useState('0364909656');
+  const [id, setId] = useState();
   if (fullName === '') {
     return (
       <LoginScreen
         setFullName={setFullName}
         setInitPhone={setPhone}
+        setId={setId}
         navigation={navigation}
       />
     );
@@ -36,6 +38,7 @@ const Router = ({navigation}) => {
             initialParams={{
               fullName: fullName,
               phone: phone,
+              id: id,
               setFullName: setFullName,
             }}
             name={item.name}

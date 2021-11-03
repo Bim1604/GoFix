@@ -14,7 +14,10 @@ const FixInfoComponent = ({navigation, route}) => {
         <HeaderComponent navigation={navigation} />
         <BodyComponent navigation={navigation} route={route} />
       </ScrollView>
-      <Bottom navigation={navigation} />
+      <Bottom
+        navigation={navigation}
+        id={route.params.id}
+      />
     </View>
   );
 };

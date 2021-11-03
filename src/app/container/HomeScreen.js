@@ -45,6 +45,7 @@ const HomeScreen = ({navigation, route}) => {
           fullName: route.params.fullName,
           phone: route.params.phone,
           setFullName: route.params.setFullName,
+          id: route.params.id,
         }}
         name="HomeComponent"
         component={HomeComponent}

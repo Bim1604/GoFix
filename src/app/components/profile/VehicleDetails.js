@@ -28,13 +28,13 @@ const VehicleDetailsComponent = ({navigation, route}) => {
       .then(json => {
         let vehicleItem = [];
         for (let index = 0; index < json.length; index++) {
-          if (route.params.phone === json[index].phone) {
+          if (route.params.id === json[index].userID) {
             vehicleItem.push(json[index]);
           }
         }
         setData(vehicleItem);
       });
-  }, [route.params.phone]);
+  }, [route.params.id]);
   const ItemVehicle = ({cate, name, number, color}) => {
     return (
       <TouchableOpacity
@@ -100,7 +100,9 @@ const VehicleDetailsComponent = ({navigation, route}) => {
       <TouchableOpacity
         style={styles.buttonStyle}
         onPress={() => {
-          navigation.navigate('VehicleAddComponent');
+          navigation.navigate('VehicleAddComponent', {
+            id: route.params.id,
+          });
         }}>
         <Text style={styles.buttonTextStyle}>+</Text>
       </TouchableOpacity>

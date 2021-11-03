@@ -17,7 +17,7 @@ const ItemBodyVehicle = ({icon, title, size, navigation, route}) => {
         <TouchableOpacity
           style={stylesVehicle.default.itemVehicleTouchable}
           onPress={() => {
-            navigation.navigate('FixInfoComponent', {route: route});
+            navigation.navigate('FixInfoComponent', {id: route.params.id});
           }}>
           <FontAwesomeIcon icon={icon} size={size} color="#fff" />
           <Text style={stylesVehicle.default.bodyItemVehicleText}>{title}</Text>

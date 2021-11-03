@@ -24,7 +24,7 @@ const ProfileComponent = ({route, navigation}) => {
       .then(res => res.json())
       .then(json => {
         for (let index = 0; index < json.length; index++) {
-          if (route.params.phone === json[index].phone) {
+          if (route.params.id === json[index].id) {
             setData(json[index]);
           }
         }
@@ -98,7 +98,7 @@ const ProfileComponent = ({route, navigation}) => {
         <TouchableOpacity
           onPress={() => {
             navigation.navigate('VehicleDetailsComponent', {
-              phone: data.phone,
+              id: data.id,
             });
           }}
           style={styles.bodyInfoContainer}>

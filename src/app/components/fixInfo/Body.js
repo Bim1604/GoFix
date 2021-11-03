@@ -5,23 +5,10 @@ import React, {useEffect, useState} from 'react';
 import {View, Text, TouchableOpacity} from 'react-native';
 import {stylesBody} from '../../styles/fixInfo';
 
-// const data = [
-//   {
-//     cate: 'Xe máy',
-//     name: 'Subaru Impreza WRX STI RA Spec-C',
-//     number: '73B.263162',
-//     color: 'Hồng',
-//   },
-//   {
-//     cate: 'Ô tô',
-//     name: 'Toyota Vios',
-//     number: '73B.283342',
-//     color: 'Hồng',
-//   },
-// ];
 const apiVehicle = 'https://history-search-map.herokuapp.com/api/vehicle';
 
 const BodyComponent = ({navigation, route}) => {
+  console.log(route);
   const [data, setData] = useState([
     {
       cate: '',
@@ -36,13 +23,13 @@ const BodyComponent = ({navigation, route}) => {
       .then(json => {
         let vehicleItem = [];
         for (let index = 0; index < json.length; index++) {
-          if (route.params.route.params.phone === json[index].phone) {
+          if (route.params.id === json[index].userID) {
             vehicleItem.push(json[index]);
           }
         }
         setData(vehicleItem);
       });
-  }, [route.params.route.params.phone]);
+  }, [route.params.id, route.params]);
   const ItemVehicle = ({cate, name, number, color}) => {
     return (
       <TouchableOpacity
@@ -53,7 +40,7 @@ const BodyComponent = ({navigation, route}) => {
             cate: cate,
             number: number,
             color: color,
-            phone: route.params.route.params.phone,
+            id: route.params.id,
           });
         }}>
         <View style={stylesBody.default.bodyIconContainer}>

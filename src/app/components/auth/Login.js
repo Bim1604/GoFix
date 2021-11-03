@@ -12,7 +12,7 @@ import logo from '../../assets/image/Logo.png';
 import {height, width} from '../../assets/base';
 const apiUser = 'https://history-search-map.herokuapp.com/api/user';
 
-const LoginComponent = ({navigation, setFullName, setInitPhone}) => {
+const LoginComponent = ({navigation, setFullName, setInitPhone, setId}) => {
   const [phone, setPhone] = useState('');
   const [password, setPassword] = useState('');
   let checkVar = false;
@@ -27,6 +27,7 @@ const LoginComponent = ({navigation, setFullName, setInitPhone}) => {
             json[index].role === 'cus'
           ) {
             setInitPhone(json[index].phone);
+            setId(json[index].id);
             setFullName(json[index].fullName);
             checkVar = true;
           }

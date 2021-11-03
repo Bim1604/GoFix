@@ -22,6 +22,7 @@ const BottomView = ({
   phone,
   cate,
   name,
+  id,
 }) => {
   return (
     <View>
@@ -76,6 +77,7 @@ const BottomView = ({
                 phone: phone,
                 cate: cate,
                 name: name,
+                id: id,
               });
             }
           }}>

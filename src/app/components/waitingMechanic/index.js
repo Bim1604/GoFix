@@ -43,12 +43,12 @@ const WaitingMechanic = ({navigation, route}) => {
       .then(res => res.json())
       .then(json => {
         for (let index = 0; index < json.length; index++) {
-          if (route.params.phone === json[index].phone) {
+          if (route.params.id === json[index].cusID) {
             setDataMechanic(json[index]);
           }
         }
       });
-  }, [route.params.phone]);
+  }, [route.params.id]);
   let total = 0;
   let detailsFixer = [];
   const data = [
@@ -160,6 +160,7 @@ const WaitingMechanic = ({navigation, route}) => {
           dataMechanic={dataMechanic}
           cate={route.params.cate}
           name={route.params.name}
+          cusID={route.params.id}
         />
       )}
     </View>
@@ -187,6 +188,7 @@ const AcceptComponent = ({
   dataMechanic,
   cate,
   name,
+  cusID,
 }) => {
   const [latAverage, setLatAverage] = useState(1);
   const [lngAverage, setLngAverage] = useState(1);
@@ -366,6 +368,8 @@ const AcceptComponent = ({
                   address: address,
                   cate: cate,
                   vehicleName: name,
+                  id: cusID,
+                  mecID: dataMechanic.id,
                 });
               }}>
               <FontAwesomeIcon icon={faPhoneAlt} color="#fff" size={20} />

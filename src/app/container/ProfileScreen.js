@@ -42,6 +42,7 @@ const ProfileScreen = ({navigation, route}) => {
           fullName: route.params.fullName,
           phone: route.params.phone,
           setFullName: route.params.setFullName,
+          id: route.params.id,
         }}
         component={ProfileComponent}
       />

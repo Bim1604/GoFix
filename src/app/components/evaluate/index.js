@@ -12,15 +12,9 @@ import LinearGradient from 'react-native-linear-gradient';
 import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
 import {
   faCommentDots,
-  faFrownOpen,
-  faGrinSquintTears,
-  faLaughBeam,
-  faSadCry,
-  faSmile,
   faTimes,
   faStar,
 } from '@fortawesome/free-solid-svg-icons';
-import ava from '../../assets/image/mechanic.jpg';
 import {height} from '../../assets/base';
 
 const apiRequest =
@@ -84,6 +78,8 @@ const EvaluateComponent = ({navigation, route}) => {
         address: route.params.address,
         detailsFix: route.params.detailsFix,
         time: time,
+        cusID: route.params.id,
+        mecID: route.params.mecID,
         price: route.params.totalCost,
         status: true,
         motor: route.params.cate !== 'Xe máy' ? '' : route.params.vehicleName,
