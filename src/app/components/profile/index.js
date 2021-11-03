@@ -10,6 +10,7 @@ const apiUser = 'https://history-search-map.herokuapp.com/api/user';
 
 const ProfileComponent = ({route, navigation}) => {
   const [data, setData] = useState({
+    id: '',
     fullName: '',
     avatar:
       'https://static2.yan.vn/YanNews/2167221/202003/dan-mang-du-trend-thiet-ke-avatar-du-kieu-day-mau-sac-tu-anh-mac-dinh-f4781c7a.jpg',
@@ -28,7 +29,8 @@ const ProfileComponent = ({route, navigation}) => {
           }
         }
       });
-  }, [route.params.phone]);
+  }, [route.params]);
+
   return (
     <View>
       {/* Header */}
@@ -47,7 +49,12 @@ const ProfileComponent = ({route, navigation}) => {
         <View style={styles.bodyUserNavContainer}>
           <View style={styles.bodyUserNavImageContainer}>
             <Image
-              source={{uri: data.avatar}}
+              source={{
+                uri:
+                  data.avatar === undefined
+                    ? 'https://static2.yan.vn/YanNews/2167221/202003/dan-mang-du-trend-thiet-ke-avatar-du-kieu-day-mau-sac-tu-anh-mac-dinh-f4781c7a.jpg'
+                    : data.avatar,
+              }}
               style={styles.bodyUserNavImage}
             />
             <Text style={styles.bodyUserNavText}>{data.fullName}</Text>
@@ -59,6 +66,7 @@ const ProfileComponent = ({route, navigation}) => {
                   gender: data.gender,
                   DOB: data.DOB,
                   avatar: data.avatar,
+                  id: data.id,
                 });
               }}
               style={styles.bodyUserEditContainer}>

@@ -60,6 +60,7 @@ const RegisComponent = ({navigation}) => {
         phone: phone,
         password: password,
         fullName: fullName,
+        role: 'cus',
       }),
       headers: {
         'Content-Type': 'application/json; charset=UTF-8',

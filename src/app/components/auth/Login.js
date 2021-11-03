@@ -23,7 +23,8 @@ const LoginComponent = ({navigation, setFullName, setInitPhone}) => {
         for (let index = 0; index < json.length; index++) {
           if (
             phone === json[index].phone &&
-            password === json[index].password
+            password === json[index].password &&
+            json[index].role === 'cus'
           ) {
             setInitPhone(json[index].phone);
             setFullName(json[index].fullName);
@@ -32,7 +33,7 @@ const LoginComponent = ({navigation, setFullName, setInitPhone}) => {
         }
       });
     if (!checkVar) {
-      alert('Số điện thoại hoặc mật khẩu không chính xác');
+      alert('Thông tin đăng nhập không hợp lệ');
     }
   };
   return (

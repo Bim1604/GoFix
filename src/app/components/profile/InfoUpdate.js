@@ -5,7 +5,7 @@ import {
   faUser,
 } from '@fortawesome/free-solid-svg-icons';
 import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   View,
   Text,
@@ -18,17 +18,76 @@ import LinearGradient from 'react-native-linear-gradient';
 import {height, width} from '../../assets/base';
 import {Picker} from '@react-native-picker/picker';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
+const apiUser = 'https://history-search-map.herokuapp.com/api/user';
 
 const InfoUpdateComponent = ({navigation, route}) => {
+  const [id, setID] = useState(route.params.id);
   const [phone, setPhone] = useState(route.params.phone);
-  const [fullName, setFullName] = useState(route.params.fullName);
-  const [gender, setGender] = useState(
-    route.params.gender === undefined ? 'Nam' : route.params.gender,
+  const [avatar, setAvatar] = useState(
+    'https://static2.yan.vn/YanNews/2167221/202003/dan-mang-du-trend-thiet-ke-avatar-du-kieu-day-mau-sac-tu-anh-mac-dinh-f4781c7a.jpg',
   );
+  const [fullName, setFullName] = useState(route.fullName);
+  const [gender, setGender] = useState(route.gender);
   const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
-  const [DOB, setDOB] = useState(
-    route.params.DOB === undefined ? '' : route.params.DOB,
-  );
+  const [DOB, setDOB] = useState(route.DOB);
+  let checkPhone = false;
+  // get api
+  useEffect(() => {
+    fetch(apiUser)
+      .then(res => res.json())
+      .then(json => {
+        for (let index = 0; index < json.length; index++) {
+          if (id === json[index].id) {
+            setID(json[index].id);
+            setPhone(json[index].phone);
+            setFullName(json[index].fullName);
+            setGender(json[index].gender);
+            setDOB(json[index].DOB);
+          }
+        }
+      });
+  }, [id]);
+  // Update API
+  const UpdateAPIUser = async () => {
+    await fetch(`https://history-search-map.herokuapp.com/api/user/${id}`, {
+      method: 'PATCH',
+      headers: {'Content-type': 'application/json'},
+      body: JSON.stringify({
+        fullName: fullName,
+        avatar: avatar,
+        gender: gender,
+        DOB: DOB,
+        phone: phone,
+      }),
+    })
+      .then(response => {
+        return response.json();
+      })
+      .then(success => console.log(success));
+  };
+  // Check phone
+  const checkPhoneExist = () => {
+    fetch(apiUser)
+      .then(res => res.json())
+      .then(json => {
+        for (let index = 0; index < json.length; index++) {
+          if (json[index].phone === phone && json[index].id !== id) {
+            alert('Số điện thoại đã được đăng kí');
+            checkPhone = true;
+          }
+        }
+        if (!checkPhone) {
+          UpdateAPIUser();
+          navigation.navigate('ProfileComponent', {
+            phone: phone,
+            avatar: avatar,
+            fullName: fullName,
+            gender: gender,
+            DOB: DOB,
+          });
+        }
+      });
+  };
   return (
     <View>
       {/* Header */}
@@ -139,8 +198,7 @@ const InfoUpdateComponent = ({navigation, route}) => {
         {/* Button update */}
         <TouchableOpacity
           onPress={() => {
-            // put api
-            navigation.navigate('ProfileComponent');
+            checkPhoneExist();
           }}
           style={styles.bodyInfoUpdateContainer}>
           <Text style={styles.bodyInfoUpdateText}>Lưu thông tin</Text>
