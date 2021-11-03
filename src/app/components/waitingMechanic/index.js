@@ -14,7 +14,7 @@ import {
   faUser,
   faWrench,
 } from '@fortawesome/free-solid-svg-icons';
-
+import call from 'react-native-phone-call';
 const apiHistory =
   'https://history-search-map.herokuapp.com/api/mechanicAccept';
 
@@ -200,7 +200,9 @@ const AcceptComponent = ({
     latUser < latMechanic
       ? (latMechanic - latUser) / (latUser / latMechanic / 2)
       : (latUser - latMechanic) / (latUser / latMechanic / 2);
-
+  const args = {
+    number: dataMechanic.phone,
+  };
   useEffect(() => {
     if (latUser > latMechanic) {
       setLatAverage(latMechanic + (latUser - latMechanic) / 2);
@@ -355,36 +357,54 @@ const AcceptComponent = ({
             <TouchableOpacity
               style={styles.bottomFooterButtonCall}
               onPress={() => {
-                navigation.navigate('EvaluateComponent', {
-                  price: totalCost,
-                  name: dataMechanic.fullName,
-                  phone: dataMechanic.phone,
-                  detailsFix: detailsFix,
-                  avatar: dataMechanic.avatar,
-                  address: address,
-                  cate: cate,
-                  vehicleName: name,
-                  id: cusID,
-                  mecID: dataMechanic.userID,
-                });
+                call(args).catch(console.error);
               }}>
               <FontAwesomeIcon icon={faPhoneAlt} color="#fff" size={20} />
             </TouchableOpacity>
           </View>
           {/* Hủy dịch vụ */}
           {isShowInfo === true ? (
-            <TouchableOpacity
-              style={styles.bottomFooterButtonCancel}
-              onPress={() => {
-                navigation.navigate('FixInfoDetailsComponent', {
-                  address: address,
-                  lat: latUser,
-                  lng: lngUser,
-                  city: city,
-                });
-              }}>
-              <Text style={styles.bottomFooterButtonText}>Hủy dịch vụ</Text>
-            </TouchableOpacity>
+            <View style={styles.bottomFooterButtonUnder}>
+              <TouchableOpacity
+                style={styles.bottomFooterButtonCancel}
+                onPress={() => {
+                  navigation.navigate('CancelComponent', {
+                    id: cusID,
+                    price: totalCost,
+                    avatar: dataMechanic.avatar,
+                    name: dataMechanic.fullName,
+                    phone: dataMechanic.phone,
+                    detailsFix: detailsFix,
+                    mecID: dataMechanic.userID,
+                    address: address,
+                    cate: cate,
+                    vehicleName: name,
+                    status: false,
+                  });
+                }}>
+                <Text style={styles.bottomFooterButtonText}>Hủy dịch vụ</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={styles.bottomFooterButtonComplete}
+                onPress={() => {
+                  navigation.navigate('EvaluateComponent', {
+                    price: totalCost,
+                    name: dataMechanic.fullName,
+                    phone: dataMechanic.phone,
+                    detailsFix: detailsFix,
+                    avatar: dataMechanic.avatar,
+                    address: address,
+                    cate: cate,
+                    vehicleName: name,
+                    id: cusID,
+                    mecID: dataMechanic.userID,
+                  });
+                }}>
+                <Text style={styles.bottomFooterButtonText}>
+                  Giả sử thợ ấn hoàn thành
+                </Text>
+              </TouchableOpacity>
+            </View>
           ) : (
             <View />
           )}
@@ -616,17 +636,34 @@ const styles = StyleSheet.create({
     backgroundColor: '#ff0000',
     borderColor: '#ff0000',
     borderRadius: 10,
-    width: '93%',
+    width: width / 2.35,
     height: 40,
     alignItems: 'center',
     justifyContent: 'center',
-    marginRight: 10,
+    marginTop: 10,
+  },
+  // Button Complete
+  bottomFooterButtonComplete: {
+    borderWidth: 1,
+    backgroundColor: '#3399FF',
+    borderColor: '#3399FF',
+    borderRadius: 10,
+    width: width / 2.2,
+    height: 40,
+    alignItems: 'center',
+    justifyContent: 'center',
     marginLeft: 15,
     marginTop: 10,
   },
   bottomFooterButtonText: {
     fontSize: 14,
     color: '#fff',
+    textAlign: 'center',
+  },
+  // Button under
+  bottomFooterButtonUnder: {
+    flexDirection: 'row',
+    marginLeft: 15,
   },
 });
 

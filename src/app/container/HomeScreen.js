@@ -11,6 +11,7 @@ import SearchMapComponent from '../components/fixInfoDetails/SearchMapComponent'
 import WaitingMechanic from '../components/waitingMechanic';
 import EvaluateComponent from '../components/evaluate';
 import VehicleAddComponent from '../components/profile/VehicleAdd';
+import CancelComponent from '../components/waitingMechanic/Cancel';
 const Stack = createStackNavigator();
 
 const HomeScreen = ({navigation, route}) => {
@@ -23,7 +24,8 @@ const HomeScreen = ({navigation, route}) => {
       routeName === 'SearchMapComponent' ||
       routeName === 'WaitingMechanicComponent' ||
       routeName === 'EvaluateComponent' ||
-      routeName === 'VehicleAddComponent'
+      routeName === 'VehicleAddComponent' ||
+      routeName === 'CancelComponent'
     ) {
       navigation.setOptions({
         tabBarStyle: {
@@ -69,6 +71,7 @@ const HomeScreen = ({navigation, route}) => {
         name="VehicleAddComponent"
         component={VehicleAddComponent}
       />
+      <Stack.Screen name="CancelComponent" component={CancelComponent} />
       <Stack.Screen name="EvaluateComponent" component={EvaluateComponent} />
     </Stack.Navigator>
   );
