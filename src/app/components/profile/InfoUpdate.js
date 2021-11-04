@@ -18,6 +18,7 @@ import LinearGradient from 'react-native-linear-gradient';
 import {height, width} from '../../assets/base';
 import {Picker} from '@react-native-picker/picker';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
+import {launchCamera} from 'react-native-image-picker';
 const apiUser = 'https://history-search-map.herokuapp.com/api/user';
 
 const InfoUpdateComponent = ({navigation, route}) => {
@@ -30,8 +31,10 @@ const InfoUpdateComponent = ({navigation, route}) => {
   const [gender, setGender] = useState(route.gender);
   const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
   const [DOB, setDOB] = useState(route.DOB);
+  const [photo, setPhoto] = useState();
   let checkPhone = false;
   // get api
+  console.log(photo);
   useEffect(() => {
     fetch(apiUser)
       .then(res => res.json())
@@ -119,7 +122,21 @@ const InfoUpdateComponent = ({navigation, route}) => {
             }}
             style={styles.bodyAvatarImage}
           />
-          <TouchableOpacity style={styles.bodyAvatarUploadContainer}>
+          <TouchableOpacity
+            onPress={async () => {
+              await launchCamera(
+                {
+                  mediaType: 'photo',
+                  quality: 1,
+                  includeBase64: true,
+                  saveToPhotos: true,
+                },
+                res => {
+                  setPhoto(res.assets);
+                },
+              );
+            }}
+            style={styles.bodyAvatarUploadContainer}>
             <Text style={styles.bodyAvatarUploadText}>Tải ảnh lên</Text>
           </TouchableOpacity>
         </View>

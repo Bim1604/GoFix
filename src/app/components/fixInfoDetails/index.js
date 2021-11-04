@@ -9,7 +9,7 @@ import BodyBase from './BodyBase';
 import ImageDescription from './ImageDescription';
 import BottomView from './BottomView';
 import BodyFormItem from './BodyFormItem';
-import GetLocation from 'react-native-get-location';
+import Geolocation from 'react-native-geolocation-service';
 
 const apiKey = 'dJFdCdCFCXpUHfhlyWyv3h8uAmLaTRn15TEAVoF2';
 const FixInfoDetailsComponent = ({navigation, route}) => {
@@ -42,25 +42,39 @@ const FixInfoDetailsComponent = ({navigation, route}) => {
     route.params.lat,
     route.params.lng,
   ]);
+  Geolocation.getCurrentPosition(
+    position => {
+      console.log(position.coords.latitude);
+      console.log(position.coords.longitude);
+    },
+    error => {
+      // See error code charts below.
+      console.log(error.code, error.message);
+    },
+    {enableHighAccuracy: true, timeout: 15000, maximumAge: 10000},
+  );
 
   useEffect(() => {
-    // GetLocation.getCurrentPosition({
-    //   enableHighAccuracy: true,
-    //   maximumAge: 300000,
-    //   timeout: 100000,
-    // }).then(location => {
-    setLatitude(10.838413);
-    setLongitude(106.833139);
-    fetch(
-      // `https://rsapi.goong.io/Geocode?latlng=${location.latitude},${location.longitude}&api_key=${apiKey}`,
-      `https://rsapi.goong.io/Geocode?latlng=10.838413,106.833139&api_key=${apiKey}`,
-    )
-      .then(res => res.json())
-      .then(local => {
-        setAddress(local.results[0].formatted_address);
-        setCity(local.results[0].address_components[2].long_name);
-      });
-    // });
+    Geolocation.getCurrentPosition(
+      position => {
+        console.log();
+        console.log();
+        setLatitude(position.coords.latitude);
+        setLongitude(position.coords.longitude);
+        fetch(
+          `https://rsapi.goong.io/Geocode?latlng=${position.coords.latitude},${position.coords.longitude}&api_key=${apiKey}`,
+        )
+          .then(res => res.json())
+          .then(local => {
+            setAddress(local.results[0].formatted_address);
+            setCity(local.results[0].address_components[2].long_name);
+          });
+      },
+      error => {
+        console.log(error.code, error.message);
+      },
+      {enableHighAccuracy: true, timeout: 15000, maximumAge: 10000},
+    );
   }, []);
 
   return (

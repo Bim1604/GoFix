@@ -63,6 +63,7 @@ const ImagePicker = ({navigation}) => {
                 saveToPhotos: true,
               },
               res => {
+                console.log(res);
                 setPhoto(res.assets);
               },
             );
