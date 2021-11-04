@@ -15,8 +15,7 @@ import {
   faWrench,
 } from '@fortawesome/free-solid-svg-icons';
 import call from 'react-native-phone-call';
-const apiHistory =
-  'https://history-search-map.herokuapp.com/api/mechanicAccept';
+const apiAccept = 'https://history-search-map.herokuapp.com/api/mechanicAccept';
 
 const WaitingMechanic = ({navigation, route}) => {
   const [isLoaded, setIsLoaded] = useState(false);
@@ -38,9 +37,8 @@ const WaitingMechanic = ({navigation, route}) => {
     phone: '',
     userID: '',
   });
-  console.log(route.params.id);
   useEffect(() => {
-    fetch(apiHistory)
+    fetch(apiAccept)
       .then(res => res.json())
       .then(json => {
         setDataMechanic(json[0]);
@@ -89,7 +87,7 @@ const WaitingMechanic = ({navigation, route}) => {
   for (let index = 0; index < data.length; index++) {
     if (data[index].isChoose === true) {
       total = total + data[index].cost;
-      detailsFixer.push(data[index].content);
+      detailsFixer.push({text: data[index].content});
     }
   }
   useEffect(() => {

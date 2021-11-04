@@ -23,7 +23,6 @@ const apiRequest =
 const apiHistoryCus =
   'https://history-search-map.herokuapp.com/api/historyCustomer';
 const EvaluateComponent = ({navigation, route}) => {
-  console.log(route.params.id);
   const [description, setDescription] = useState('');
   const [star, setStar] = useState();
   const [isStar, setIsStar] = useState(false);
@@ -80,9 +79,10 @@ const EvaluateComponent = ({navigation, route}) => {
         address: route.params.address,
         detailsFix: route.params.detailsFix,
         time: time,
+        image: [],
         cusID: route.params.id,
         mecID: route.params.mecID,
-        price: route.params.totalCost,
+        price: route.params.price,
         status: true,
         motor: route.params.cate !== 'Xe máy' ? '' : route.params.vehicleName,
         car: route.params.cate === 'Xe máy' ? '' : route.params.vehicleName,

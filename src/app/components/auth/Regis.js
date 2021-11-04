@@ -117,6 +117,7 @@ const RegisComponent = ({navigation}) => {
               style={styles.bodyRegisTextInput}
               onChangeText={setPassword}
               value={password}
+              secureTextEntry={true}
               onChange={text => setPassword(text)}
               placeholder="Nhập mật khẩu"
             />
@@ -125,6 +126,7 @@ const RegisComponent = ({navigation}) => {
               style={styles.bodyRegisTextInput}
               onChangeText={setRePassword}
               value={rePassword}
+              secureTextEntry={true}
               onChange={text => setRePassword(text)}
               placeholder="Nhập lại mật khẩu"
             />
