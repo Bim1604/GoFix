@@ -190,7 +190,7 @@ const styles = StyleSheet.create({
   },
   // list container
   listItemContainer: {
-    height: height - height / 6,
+    height: height - height / 5,
   },
   // Item container
   itemContainer: {

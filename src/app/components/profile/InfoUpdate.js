@@ -19,8 +19,12 @@ import {height, width} from '../../assets/base';
 import {Picker} from '@react-native-picker/picker';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 const apiUser = 'https://history-search-map.herokuapp.com/api/user';
+import {launchCamera} from 'react-native-image-picker';
+import storage from '@react-native-firebase/storage';
 
 const InfoUpdateComponent = ({navigation, route}) => {
+  const reference = storage().ref('test.jpg');
+  const [photo, setPhoto] = useState();
   const [id, setID] = useState(route.params.id);
   const [phone, setPhone] = useState(route.params.phone);
   const [avatar, setAvatar] = useState(
@@ -66,6 +70,7 @@ const InfoUpdateComponent = ({navigation, route}) => {
       })
       .then(success => console.log(success));
   };
+  console.log(avatar);
   // Check phone
   const checkPhoneExist = () => {
     fetch(apiUser)
@@ -119,8 +124,34 @@ const InfoUpdateComponent = ({navigation, route}) => {
             }}
             style={styles.bodyAvatarImage}
           />
-          <TouchableOpacity style={styles.bodyAvatarUploadContainer}>
-            <Text style={styles.bodyAvatarUploadText}>Tải ảnh lên</Text>
+          <TouchableOpacity
+            style={styles.bodyAvatarUploadContainer}
+            onPress={async () => {
+              await launchCamera(
+                {
+                  mediaType: 'photo',
+                  quality: 1,
+                  includeBase64: true,
+                  saveToPhotos: true,
+                },
+                res => {
+                  console.log(res.assets[0].fileName);
+                  console.log(res.assets[0].uri);
+                  storage()
+                    .ref(res.assets[0].fileName)
+                    .putFile(res.assets[0].uri)
+                    .then(async () => {
+                      console.log(3);
+                      const url = await storage()
+                        .ref(res.assets[0].fileName)
+                        .getDownloadURL();
+                      console.log(url);
+                      setAvatar(url);
+                    });
+                },
+              );
+            }}>
+            <Text>Tải ảnh lên</Text>
           </TouchableOpacity>
         </View>
         {/* Item */}

@@ -1,9 +1,9 @@
 // /* eslint-disable prettier/prettier */
-// import React, {useEffect} from 'react';
+// import React from 'react';
 // import {Dimensions, StyleSheet, View} from 'react-native';
-// import MapView, {Marker, PROVIDER_GOOGLE} from 'react-native-maps'; // remove PROVIDER_GOOGLE import if not using Google Maps
+// import MapView from 'react-native-maps'; // remove PROVIDER_GOOGLE import if not using Google Maps
 // import {useState} from 'react';
-// import GetLocation from 'react-native-get-location';
+// import Geolocation from 'react-native-geolocation-service';
 
 // const center =
 //   (Dimensions.get('window').width / Dimensions.get('window').height) * 0.0122;
@@ -24,31 +24,17 @@
 //   const [latitude, setLatitude] = useState(1);
 //   const [longtitude, setLongtitude] = useState(1);
 
-//   var NY = {
-//     lat: 40.7809261,
-//     lng: -73.9637594,
-//   };
-
-//   Geocoder.geocodePosition(NY);
-
-//   useEffect(() => {
-//     getLocal();
-//     return () => {
-//       getLocal();
-//     };
-//   }, []);
-
-//   const getLocal = () => {
-//     GetLocation.getCurrentPosition({
-//       enableHighAccuracy: true,
-//       timeout: 15000,
-//     })
-//       .then(location => {
-//         setLatitude(location.latitude);
-//         setLongtitude(location.longitude);
-//       })
-//       .catch(error => {});
-//   };
+//   Geolocation.getCurrentPosition(
+//     position => {
+//       console.log(position.coords.latitude);
+//       console.log(position.coords.longitude);
+//     },
+//     error => {
+//       // See error code charts below.
+//       console.log(error.code, error.message);
+//     },
+//     {enableHighAccuracy: true, timeout: 15000, maximumAge: 10000},
+//   );
 
 //   return (
 //     <View style={styles.container}>

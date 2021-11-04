@@ -399,7 +399,7 @@ const AcceptComponent = ({
                   });
                 }}>
                 <Text style={styles.bottomFooterButtonText}>
-                  Giả sử thợ ấn hoàn thành
+                  Xác nhận hoàn thành
                 </Text>
               </TouchableOpacity>
             </View>
