@@ -42,23 +42,10 @@ const FixInfoDetailsComponent = ({navigation, route}) => {
     route.params.lat,
     route.params.lng,
   ]);
-  Geolocation.getCurrentPosition(
-    position => {
-      console.log(position.coords.latitude);
-      console.log(position.coords.longitude);
-    },
-    error => {
-      // See error code charts below.
-      console.log(error.code, error.message);
-    },
-    {enableHighAccuracy: true, timeout: 15000, maximumAge: 10000},
-  );
 
   useEffect(() => {
     Geolocation.getCurrentPosition(
       position => {
-        console.log();
-        console.log();
         setLatitude(position.coords.latitude);
         setLongitude(position.coords.longitude);
         fetch(
