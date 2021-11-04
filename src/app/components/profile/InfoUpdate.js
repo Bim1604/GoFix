@@ -70,7 +70,6 @@ const InfoUpdateComponent = ({navigation, route}) => {
       })
       .then(success => console.log(success));
   };
-  console.log(avatar);
   // Check phone
   const checkPhoneExist = () => {
     fetch(apiUser)
@@ -124,6 +123,9 @@ const InfoUpdateComponent = ({navigation, route}) => {
             }}
             style={styles.bodyAvatarImage}
           />
+          {/* <TouchableOpacity style={styles.bodyAvatarUploadContainer}>
+                  <Text style={styles.bodyAvatarUploadText}>Tải ảnh lên</Text>
+               </TouchableOpacity> */}
           <TouchableOpacity
             style={styles.bodyAvatarUploadContainer}
             onPress={async () => {
@@ -135,17 +137,13 @@ const InfoUpdateComponent = ({navigation, route}) => {
                   saveToPhotos: true,
                 },
                 res => {
-                  console.log(res.assets[0].fileName);
-                  console.log(res.assets[0].uri);
                   storage()
                     .ref(res.assets[0].fileName)
                     .putFile(res.assets[0].uri)
                     .then(async () => {
-                      console.log(3);
                       const url = await storage()
                         .ref(res.assets[0].fileName)
                         .getDownloadURL();
-                      console.log(url);
                       setAvatar(url);
                     });
                 },
