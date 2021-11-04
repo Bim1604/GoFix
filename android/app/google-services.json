@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "738278361557",
+    "firebase_url": "https://prm-project-c1964-default-rtdb.asia-southeast1.firebasedatabase.app",
+    "project_id": "prm-project-c1964",
+    "storage_bucket": "prm-project-c1964.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:738278361557:android:b38e71f7bb04cc2379955c",
+        "android_client_info": {
+          "package_name": "com.gofix"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "738278361557-v61h4j248jaf82lov4f39p8ugtvpeci4.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.gofix",
+            "certificate_hash": "dd6576e987e046cff558aa6c3043681a68c5c78a"
+          }
+        },
+        {
+          "client_id": "738278361557-7s01ai9dat52v2laukf05psr29m4u7bs.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCw-bm9u_Iz9JlRhl6jbVqi3esKnGOTinI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "738278361557-7s01ai9dat52v2laukf05psr29m4u7bs.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
