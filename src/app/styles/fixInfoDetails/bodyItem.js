@@ -29,13 +29,13 @@ const stylesBodyItem = StyleSheet.create({
   // Body Check Box
   bodyCheckBoxContainer: {
     flexDirection: 'column',
-    marginLeft: 20,
+    marginLeft: 10,
   },
   bodyCheckBoxItemContainer: {
     flexDirection: 'row',
   },
   bodyCheckBoxLeftContainer: {
-    marginRight: width / 4,
+    marginRight: width / 6,
   },
   bodyCheckBoxMiniContainer: {
     flexDirection: 'row',
@@ -51,8 +51,6 @@ const stylesBodyItem = StyleSheet.create({
   bodyCheckBoxContent: {
     paddingLeft: 10,
     paddingRight: 10,
-    marginLeft: -5,
-    width: 380,
     backgroundColor: '#f7f7f7',
     borderWidth: 1,
     borderRadius: 6,

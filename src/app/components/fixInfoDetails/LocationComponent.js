@@ -1,5 +1,5 @@
 /* eslint-disable prettier/prettier */
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   Dimensions,
   Text,
@@ -27,10 +27,10 @@ const apiKey = 'dJFdCdCFCXpUHfhlyWyv3h8uAmLaTRn15TEAVoF2';
 
 const LocationComponent = ({navigation, route}) => {
   const [latitude, setLatitude] = useState(
-    route.params.lat !== undefined ? route.params.lat : 10,
+    route.params.lat !== undefined ? route.params.lat : 10.838413,
   );
   const [longitude, setLongitude] = useState(
-    route.params.lng !== undefined ? route.params.lng : 10,
+    route.params.lng !== undefined ? route.params.lng : 106.833139,
   );
   const [city, setCity] = useState(
     route.params.city !== undefined ? route.params.city : '',

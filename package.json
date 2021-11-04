@@ -31,6 +31,7 @@
     "react-native-maps": "0.29.3",
     "react-native-modal": "^13.0.0",
     "react-native-modal-datetime-picker": "^13.0.0",
+    "react-native-phone-call": "^1.0.9",
     "react-native-safe-area-context": "^3.3.2",
     "react-native-screens": "^3.7.0",
     "react-native-svg": "^12.1.1",

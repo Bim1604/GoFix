@@ -15,7 +15,7 @@ YellowBox.ignoreWarnings([
 ]);
 const Router = ({navigation}) => {
   const [fullName, setFullName] = useState('');
-  const [phone, setPhone] = useState('0364909656');
+  const [phone, setPhone] = useState('');
   const [id, setId] = useState();
   if (fullName === '') {
     return (

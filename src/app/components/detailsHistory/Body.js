@@ -61,7 +61,7 @@ const ImageFixer = ({
   );
 };
 
-const ItemFixer = ({title, price}) => {
+const ItemFixer = ({title}) => {
   return (
     <View>
       <View style={styles.itemContainer}>
@@ -70,8 +70,7 @@ const ItemFixer = ({title, price}) => {
           <Text style={styles.itemTitle}>{title}</Text>
         </View>
         <View style={styles.itemTextInputContainer}>
-          <Text style={styles.itemTextInput}>{price}</Text>
-          <Text style={styles.itemCurrencyText}> Đ</Text>
+          <Text style={styles.itemCurrencyText}> </Text>
         </View>
       </View>
     </View>
@@ -111,7 +110,7 @@ const BodyDetails = ({
               activeDotStyle={styles.headerActiveDot}
               dotStyle={styles.headerDot}>
               {image.map((url, index) => (
-                <ImageBody key={index} image={url.link} />
+                <ImageBody key={index} image={url.text} />
               ))}
             </Swiper>
           </View>
@@ -198,7 +197,7 @@ const BodyDetails = ({
           <Text style={styles.bodyItemTitle}>Chi tiết sửa chữa</Text>
         </View>
         {detailsFix.map((item, index) => (
-          <ItemFixer title={item.fix} price={item.unitPrice} key={index} />
+          <ItemFixer title={item.text}  key={index} />
         ))}
         <View
           style={{
@@ -232,7 +231,7 @@ const BodyDetails = ({
                 indexCurrent={index}
                 setModalVisible={setModalVisible}
                 key={index}
-                image={item.link}
+                image={item.text}
               />
             ))}
           </ScrollView>

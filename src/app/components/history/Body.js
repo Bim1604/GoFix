@@ -115,7 +115,7 @@ const HistoryItem = ({
         </View>
         <View>
           <View style={styles.itemDetailsFixContainer}>
-            <ItemListDetails icon={faWrench} text={detailsFix[0].fix} />
+            <ItemListDetails icon={faWrench} text={detailsFix[0].text} />
             <ItemListDetails icon={faDollarSign} text={price} />
           </View>
           <View>
@@ -132,20 +132,26 @@ const HistoryItem = ({
 
 const apiHistoryCus =
   'https://history-search-map.herokuapp.com/api/historyCustomer';
-const BodyComponent = ({navigation}) => {
+const BodyComponent = ({navigation, id}) => {
   const [data, setData] = useState();
 
   const getHistoryCus = async () => {
     await fetch(apiHistoryCus)
       .then(res => res.json())
       .then(json => {
-        setData(json);
+        let historyItem = [];
+        for (let index = 0; index < json.length; index++) {
+          if (id === json[index].cusID) {
+            historyItem.push(json[index]);
+          }
+        }
+        setData(historyItem);
       });
   };
 
   useEffect(() => {
     getHistoryCus();
-  }, []);
+  });
   const renderItem = ({item, index}) => {
     return (
       <View>
@@ -170,7 +176,7 @@ const BodyComponent = ({navigation}) => {
   };
   return (
     <View style={styles.container}>
-      <View>
+      <View style={styles.listItemContainer}>
         <FlatList data={data} renderItem={renderItem} horizontal={false} />
       </View>
     </View>
@@ -181,6 +187,10 @@ const styles = StyleSheet.create({
   container: {
     width: width,
     height: height,
+  },
+  // list container
+  listItemContainer: {
+    height: height - height / 6,
   },
   // Item container
   itemContainer: {

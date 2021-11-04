@@ -40,6 +40,7 @@ const InfoUpdateComponent = ({navigation, route}) => {
           if (id === json[index].id) {
             setID(json[index].id);
             setPhone(json[index].phone);
+            setAvatar(json[index].avatar);
             setFullName(json[index].fullName);
             setGender(json[index].gender);
             setDOB(json[index].DOB);

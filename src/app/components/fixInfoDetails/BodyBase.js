@@ -18,6 +18,7 @@ const BodyBase = ({navigation, route, address, latitude, longitude, city}) => {
   const [cate, setCate] = useState(route.params.cate);
   const [name, setName] = useState(route.params.name);
   const [number, setNumber] = useState(route.params.number);
+
   return (
     <View>
       <Text style={stylesBodyBase.default.bodyTitle}>Vị trí hiện tại</Text>

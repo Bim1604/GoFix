@@ -30,6 +30,7 @@ const FixInfoDetailsComponent = ({navigation, route}) => {
   const [cate, setCate] = useState(route.params.cate);
   const [name, setName] = useState(route.params.name);
   const [id, setID] = useState(route.params.id);
+
   useEffect(() => {
     setAddress(route.params.address);
     setLatitude(route.params.lat);
@@ -43,21 +44,23 @@ const FixInfoDetailsComponent = ({navigation, route}) => {
   ]);
 
   useEffect(() => {
-    GetLocation.getCurrentPosition({
-      enableHighAccuracy: true,
-      timeout: 15000,
-    }).then(location => {
-      setLatitude(location.latitude);
-      setLongitude(location.longitude);
-      fetch(
-        `https://rsapi.goong.io/Geocode?latlng=${location.latitude},${location.longitude}&api_key=${apiKey}`,
-      )
-        .then(res => res.json())
-        .then(local => {
-          setAddress(local.results[0].formatted_address);
-          setCity(local.results[0].address_components[2].long_name);
-        });
-    });
+    // GetLocation.getCurrentPosition({
+    //   enableHighAccuracy: true,
+    //   maximumAge: 300000,
+    //   timeout: 100000,
+    // }).then(location => {
+    setLatitude(10.838413);
+    setLongitude(106.833139);
+    fetch(
+      // `https://rsapi.goong.io/Geocode?latlng=${location.latitude},${location.longitude}&api_key=${apiKey}`,
+      `https://rsapi.goong.io/Geocode?latlng=10.838413,106.833139&api_key=${apiKey}`,
+    )
+      .then(res => res.json())
+      .then(local => {
+        setAddress(local.results[0].formatted_address);
+        setCity(local.results[0].address_components[2].long_name);
+      });
+    // });
   }, []);
 
   return (

@@ -2,6 +2,7 @@
 import React, {useEffect, useState} from 'react';
 import {
   Image,
+  ScrollView,
   StyleSheet,
   Text,
   TextInput,
@@ -15,7 +16,7 @@ import {
   faTimes,
   faStar,
 } from '@fortawesome/free-solid-svg-icons';
-import {height} from '../../assets/base';
+import {height, width} from '../../assets/base';
 
 const apiRequest =
   'https://history-search-map.herokuapp.com/api/requestCustomer';
@@ -78,9 +79,10 @@ const EvaluateComponent = ({navigation, route}) => {
         address: route.params.address,
         detailsFix: route.params.detailsFix,
         time: time,
+        image: [],
         cusID: route.params.id,
         mecID: route.params.mecID,
-        price: route.params.totalCost,
+        price: route.params.price,
         status: true,
         motor: route.params.cate !== 'Xe máy' ? '' : route.params.vehicleName,
         car: route.params.cate === 'Xe máy' ? '' : route.params.vehicleName,
@@ -135,150 +137,157 @@ const EvaluateComponent = ({navigation, route}) => {
   };
 
   return (
-    <View style={styles.container}>
-      {/* Header */}
-      <LinearGradient
-        colors={['#fe8c00', '#f83600']}
-        start={{x: 0.0, y: 1.0}}
-        end={{x: 1.0, y: 1.0}}>
-        <View style={styles.headerContainer}>
-          <TouchableOpacity
-            onPress={() => {
-              PostAPIHistoryCus();
-              navigation.popToTop();
-            }}>
-            <FontAwesomeIcon
-              style={styles.headerIconBack}
-              icon={faTimes}
-              size={30}
+    <ScrollView>
+      <View style={styles.container}>
+        {/* Header */}
+        <LinearGradient
+          colors={['#fe8c00', '#f83600']}
+          start={{x: 0.0, y: 1.0}}
+          end={{x: 1.0, y: 1.0}}>
+          <View style={styles.headerContainer}>
+            <TouchableOpacity
+              onPress={() => {
+                PostAPIHistoryCus();
+                navigation.popToTop();
+              }}>
+              <FontAwesomeIcon
+                style={styles.headerIconBack}
+                icon={faTimes}
+                size={30}
+              />
+            </TouchableOpacity>
+            <Text style={styles.headerText}>ĐÁNH GIÁ DỊCH VỤ</Text>
+            {/* Icon */}
+            <TouchableOpacity>
+              <FontAwesomeIcon
+                style={styles.headerIconMessage}
+                icon={faCommentDots}
+                size={26}
+              />
+            </TouchableOpacity>
+          </View>
+        </LinearGradient>
+        {/* Body */}
+        <View style={styles.bodyContainer}>
+          {/* Image */}
+          <View style={styles.bodyImageContainer}>
+            <Image
+              source={{uri: route.params.avatar}}
+              style={styles.bodyImage}
             />
-          </TouchableOpacity>
-          <Text style={styles.headerText}>ĐÁNH GIÁ DỊCH VỤ</Text>
-          {/* Icon */}
-          <TouchableOpacity>
-            <FontAwesomeIcon
-              style={styles.headerIconMessage}
-              icon={faCommentDots}
-              size={26}
-            />
-          </TouchableOpacity>
+          </View>
+          <View style={styles.bodyTextContainer}>
+            <Text style={styles.bodyTextTitle}>
+              Bạn cảm thấy dịch vụ như thế nào
+            </Text>
+            <Text style={styles.bodyText}>
+              Hãy giúp chúng tôi cải thiện trải
+            </Text>
+            <Text style={styles.bodyText}>
+              nghiệm với GoFix bằng cách đánh giá
+            </Text>
+            <Text style={styles.bodyText}>cuốc xe này.</Text>
+            {/* Star rate */}
+            <View style={styles.bodyStarContainer}>
+              <TouchableOpacity onPress={() => EvaluateStarComponent(1)}>
+                <FontAwesomeIcon
+                  style={
+                    isStar === true && star >= 1
+                      ? styles.bodyStarIconReady
+                      : styles.bodyStarIcon
+                  }
+                  icon={faStar}
+                  size={35}
+                />
+              </TouchableOpacity>
+              <TouchableOpacity onPress={() => EvaluateStarComponent(2)}>
+                <FontAwesomeIcon
+                  style={
+                    isStar === true && star >= 2
+                      ? styles.bodyStarIconReady
+                      : styles.bodyStarIcon
+                  }
+                  icon={faStar}
+                  size={35}
+                />
+              </TouchableOpacity>
+              <TouchableOpacity onPress={() => EvaluateStarComponent(3)}>
+                <FontAwesomeIcon
+                  style={
+                    isStar === true && star >= 3
+                      ? styles.bodyStarIconReady
+                      : styles.bodyStarIcon
+                  }
+                  icon={faStar}
+                  size={35}
+                />
+              </TouchableOpacity>
+              <TouchableOpacity onPress={() => EvaluateStarComponent(4)}>
+                <FontAwesomeIcon
+                  style={
+                    isStar === true && star >= 4
+                      ? styles.bodyStarIconReady
+                      : styles.bodyStarIcon
+                  }
+                  icon={faStar}
+                  size={35}
+                />
+              </TouchableOpacity>
+              <TouchableOpacity onPress={() => EvaluateStarComponent(5)}>
+                <FontAwesomeIcon
+                  style={
+                    isStar === true && star === 5
+                      ? styles.bodyStarIconReady
+                      : styles.bodyStarIcon
+                  }
+                  icon={faStar}
+                  size={35}
+                />
+              </TouchableOpacity>
+            </View>
+            <LinearGradient
+              colors={['#fe8c00', '#f83600']}
+              start={{x: 0.0, y: 1.0}}
+              end={{x: 1.0, y: 1.0}}
+              style={styles.footerLinearGradient}>
+              <View style={styles.bodyRateContainer}>
+                <TextInput
+                  style={styles.bodyRateTextInput}
+                  placeholder="Đánh giá của bạn"
+                  multiline={true}
+                  onChangeText={text => setDescription(text)}
+                  value={description}
+                />
+              </View>
+            </LinearGradient>
+          </View>
         </View>
-      </LinearGradient>
-      {/* Body */}
-      <View style={styles.bodyContainer}>
-        {/* Image */}
-        <View style={styles.bodyImageContainer}>
-          <Image source={{uri: route.params.avatar}} style={styles.bodyImage} />
-        </View>
-        <View style={styles.bodyTextContainer}>
-          <Text style={styles.bodyTextTitle}>
-            Bạn cảm thấy dịch vụ như thế nào
-          </Text>
-          <Text style={styles.bodyText}>Hãy giúp chúng tôi cải thiện trải</Text>
-          <Text style={styles.bodyText}>
-            nghiệm với GoFix bằng cách đánh giá
-          </Text>
-          <Text style={styles.bodyText}>cuốc xe này.</Text>
-          {/* Star rate */}
-          <View style={styles.bodyStarContainer}>
-            <TouchableOpacity onPress={() => EvaluateStarComponent(1)}>
-              <FontAwesomeIcon
-                style={
-                  isStar === true && star >= 1
-                    ? styles.bodyStarIconReady
-                    : styles.bodyStarIcon
-                }
-                icon={faStar}
-                size={35}
-              />
-            </TouchableOpacity>
-            <TouchableOpacity onPress={() => EvaluateStarComponent(2)}>
-              <FontAwesomeIcon
-                style={
-                  isStar === true && star >= 2
-                    ? styles.bodyStarIconReady
-                    : styles.bodyStarIcon
-                }
-                icon={faStar}
-                size={35}
-              />
-            </TouchableOpacity>
-            <TouchableOpacity onPress={() => EvaluateStarComponent(3)}>
-              <FontAwesomeIcon
-                style={
-                  isStar === true && star >= 3
-                    ? styles.bodyStarIconReady
-                    : styles.bodyStarIcon
-                }
-                icon={faStar}
-                size={35}
-              />
-            </TouchableOpacity>
-            <TouchableOpacity onPress={() => EvaluateStarComponent(4)}>
-              <FontAwesomeIcon
-                style={
-                  isStar === true && star >= 4
-                    ? styles.bodyStarIconReady
-                    : styles.bodyStarIcon
-                }
-                icon={faStar}
-                size={35}
-              />
-            </TouchableOpacity>
-            <TouchableOpacity onPress={() => EvaluateStarComponent(5)}>
-              <FontAwesomeIcon
-                style={
-                  isStar === true && star === 5
-                    ? styles.bodyStarIconReady
-                    : styles.bodyStarIcon
-                }
-                icon={faStar}
-                size={35}
-              />
-            </TouchableOpacity>
+        {/* Footer */}
+        <View style={styles.footerContainer}>
+          <View style={styles.footerFeeContainer}>
+            <Text style={styles.bodyFooterText}>Tổng chi phí sửa chửa</Text>
+            <Text style={styles.bodyFooterText}>
+              {route.params.price}.000 Đ
+            </Text>
           </View>
           <LinearGradient
             colors={['#fe8c00', '#f83600']}
             start={{x: 0.0, y: 1.0}}
             end={{x: 1.0, y: 1.0}}
             style={styles.footerLinearGradient}>
-            <View style={styles.bodyRateContainer}>
-              <TextInput
-                style={styles.bodyRateTextInput}
-                placeholder="Đánh giá của bạn"
-                multiline={true}
-                onChangeText={text => setDescription(text)}
-                value={description}
-              />
-            </View>
+            <TouchableOpacity
+              style={styles.bodyFooterButton}
+              onPress={() => {
+                PostAPIRequest();
+                PostAPIHistoryCus();
+                navigation.popToTop();
+              }}>
+              <Text style={styles.bodyFooterButtonText}>Gửi</Text>
+            </TouchableOpacity>
           </LinearGradient>
         </View>
       </View>
-      {/* Footer */}
-      <View style={styles.footerContainer}>
-        <View style={styles.footerFeeContainer}>
-          <Text style={styles.bodyFooterText}>Tổng chi phí sửa chửa</Text>
-          <Text style={styles.bodyFooterText}>
-            {route.params.price}.000 Đ
-          </Text>
-        </View>
-        <LinearGradient
-          colors={['#fe8c00', '#f83600']}
-          start={{x: 0.0, y: 1.0}}
-          end={{x: 1.0, y: 1.0}}
-          style={styles.footerLinearGradient}>
-          <TouchableOpacity
-            style={styles.bodyFooterButton}
-            onPress={() => {
-              PostAPIRequest();
-              PostAPIHistoryCus();
-              navigation.popToTop();
-            }}>
-            <Text style={styles.bodyFooterButtonText}>Gửi</Text>
-          </TouchableOpacity>
-        </LinearGradient>
-      </View>
-    </View>
+    </ScrollView>
   );
 };
 
@@ -291,7 +300,7 @@ const styles = StyleSheet.create({
   headerContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    height: height / 12,
+    height: height / 9,
   },
   headerIconBack: {
     color: '#fff',
@@ -309,7 +318,7 @@ const styles = StyleSheet.create({
   },
   // body
   bodyContainer: {
-    height: '72%',
+    height: height / 1.7,
   },
   bodyImageContainer: {
     height: '40%',
@@ -333,10 +342,11 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: '#808080',
   },
+  // Star
   bodyStarContainer: {
     flexDirection: 'row',
-    width: 300,
-    height: 50,
+    width: width / 1.25,
+    height: height / 20,
     marginTop: 20,
   },
   bodyStarIcon: {
@@ -348,8 +358,8 @@ const styles = StyleSheet.create({
     color: '#fe8c00',
   },
   bodyRateContainer: {
-    width: 380,
-    minHeight: 100,
+    width: width / 1.15,
+    height: height / 10,
     borderColor: '#fff',
     borderWidth: 1,
     borderRadius: 15,
@@ -368,25 +378,26 @@ const styles = StyleSheet.create({
   },
   footerFeeContainer: {
     borderTopWidth: 1,
+    marginTop: height / 20,
     paddingTop: 20,
     backgroundColor: '#fff',
     borderTopColor: '#D3D3D3',
-    height: 80,
-    width: 300,
+    height: height / 10,
+    width: width / 1.25,
     flexDirection: 'row',
     justifyContent: 'space-between',
   },
   bodyFooterText: {
     color: '#000',
-    fontSize: 18,
+    fontSize: 16,
   },
   footerLinearGradient: {
     borderRadius: 15,
-    marginTop: 15,
+    marginTop: height / 40,
   },
   bodyFooterButton: {
-    width: 380,
-    height: 50,
+    width: width / 1.15,
+    height: height / 15,
     justifyContent: 'center',
     alignItems: 'center',
   },

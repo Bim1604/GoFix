@@ -7,6 +7,7 @@ import {
   TextInput,
   TouchableOpacity,
   StyleSheet,
+  ScrollView,
 } from 'react-native';
 import logo from '../../assets/image/Logo.png';
 import {height, width} from '../../assets/base';
@@ -38,54 +39,59 @@ const LoginComponent = ({navigation, setFullName, setInitPhone, setId}) => {
     }
   };
   return (
-    <View style={styles.container}>
-      {/* Header */}
-      <View style={styles.headerContainer}>
-        <View style={styles.headerLogoContainer}>
-          <Image source={logo} style={styles.headerLogoImage} />
+    <ScrollView>
+      <View style={styles.container}>
+        {/* Header */}
+        <View style={styles.headerContainer}>
+          <View style={styles.headerLogoContainer}>
+            <Image source={logo} style={styles.headerLogoImage} />
+          </View>
+          <Text style={styles.headerLogoTitle}>GoFix</Text>
+          <Text style={styles.headerLogoText}>
+            Sửa xe nhanh chóng và tiện lợi
+          </Text>
         </View>
-        <Text style={styles.headerLogoTitle}>GoFix</Text>
-        <Text style={styles.headerLogoText}>
-          Sửa xe nhanh chóng và tiện lợi
-        </Text>
-      </View>
-      {/* Body */}
-      <View style={styles.bodyContainer}>
-        <View style={styles.bodyContentContainer}>
-          <Text style={styles.bodyRegisTitle}>Số điện thoại</Text>
-          <TextInput
-            onChangeText={setPhone}
-            value={phone}
-            onChange={text => setPhone(text)}
-            style={styles.bodyRegisTextInput}
-            placeholder="Nhập số điện thoại"
-          />
-          <Text style={styles.bodyRegisTitle}>Mật khẩu</Text>
-          <TextInput
-            onChangeText={setPassword}
-            value={password}
-            onChange={text => setPassword(text)}
-            style={styles.bodyRegisTextInput}
-            placeholder="Nhập mật khẩu"
-          />
+        {/* Body */}
+        <View style={styles.bodyContainer}>
+          <View style={styles.bodyContentContainer}>
+            <Text style={styles.bodyRegisTitle}>Số điện thoại</Text>
+            <TextInput
+              onChangeText={setPhone}
+              value={phone}
+              onChange={text => setPhone(text)}
+              style={styles.bodyRegisTextInput}
+              placeholder="Nhập số điện thoại"
+            />
+            <Text style={styles.bodyRegisTitle}>Mật khẩu</Text>
+            <TextInput
+              onChangeText={setPassword}
+              value={password}
+              secureTextEntry={true}
+              onChange={text => setPassword(text)}
+              style={styles.bodyRegisTextInput}
+              placeholder="Nhập mật khẩu"
+            />
+          </View>
+          <TouchableOpacity
+            onPress={() => {
+              checkLogin();
+            }}
+            style={styles.bodyRegisButton}>
+            <Text style={styles.bodyRegisButtonText}>Đăng Nhập</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={styles.bodyRouteLogin}
+            onPress={() => {
+              navigation.navigate('RegisComponent');
+            }}>
+            <Text style={styles.bodyRouteText_left}>
+              Bạn chưa có tài khoản?{' '}
+            </Text>
+            <Text style={styles.bodyRouteText_right}>Đăng ký ngay</Text>
+          </TouchableOpacity>
         </View>
-        <TouchableOpacity
-          onPress={() => {
-            checkLogin();
-          }}
-          style={styles.bodyRegisButton}>
-          <Text style={styles.bodyRegisButtonText}>Đăng Nhập</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={styles.bodyRouteLogin}
-          onPress={() => {
-            navigation.navigate('RegisComponent');
-          }}>
-          <Text style={styles.bodyRouteText_left}>Bạn chưa có tài khoản? </Text>
-          <Text style={styles.bodyRouteText_right}>Đăng ký ngay</Text>
-        </TouchableOpacity>
       </View>
-    </View>
+    </ScrollView>
   );
 };
 
@@ -142,7 +148,7 @@ const styles = StyleSheet.create({
     marginHorizontal: width / 10,
     borderRadius: 10,
     paddingLeft: 15,
-    height: height / 20,
+    height: height / 15,
   },
   //   Button
   bodyRegisButton: {

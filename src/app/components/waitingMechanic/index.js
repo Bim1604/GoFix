@@ -14,8 +14,8 @@ import {
   faUser,
   faWrench,
 } from '@fortawesome/free-solid-svg-icons';
-
-const apiUser = 'https://history-search-map.herokuapp.com/api/historyCustomer';
+import call from 'react-native-phone-call';
+const apiAccept = 'https://history-search-map.herokuapp.com/api/mechanicAccept';
 
 const WaitingMechanic = ({navigation, route}) => {
   const [isLoaded, setIsLoaded] = useState(false);
@@ -33,22 +33,17 @@ const WaitingMechanic = ({navigation, route}) => {
     fullName: '',
     avatar:
       'https://static2.yan.vn/YanNews/2167221/202003/dan-mang-du-trend-thiet-ke-avatar-du-kieu-day-mau-sac-tu-anh-mac-dinh-f4781c7a.jpg',
-    gender: '',
-    DOB: '',
+    address: '',
     phone: '',
-    password: '',
+    userID: '',
   });
   useEffect(() => {
-    fetch(apiUser)
+    fetch(apiAccept)
       .then(res => res.json())
       .then(json => {
-        for (let index = 0; index < json.length; index++) {
-          if (route.params.id === json[index].cusID) {
-            setDataMechanic(json[index]);
-          }
-        }
+        setDataMechanic(json[0]);
       });
-  }, [route.params.id]);
+  }, []);
   let total = 0;
   let detailsFixer = [];
   const data = [
@@ -92,7 +87,7 @@ const WaitingMechanic = ({navigation, route}) => {
   for (let index = 0; index < data.length; index++) {
     if (data[index].isChoose === true) {
       total = total + data[index].cost;
-      detailsFixer.push(data[index].content);
+      detailsFixer.push({text: data[index].content});
     }
   }
   useEffect(() => {
@@ -203,7 +198,9 @@ const AcceptComponent = ({
     latUser < latMechanic
       ? (latMechanic - latUser) / (latUser / latMechanic / 2)
       : (latUser - latMechanic) / (latUser / latMechanic / 2);
-
+  const args = {
+    number: dataMechanic.phone,
+  };
   useEffect(() => {
     if (latUser > latMechanic) {
       setLatAverage(latMechanic + (latUser - latMechanic) / 2);
@@ -216,7 +213,6 @@ const AcceptComponent = ({
       setLngAverage(lngUser + (lngMechanic - lngUser) / 2);
     }
   }, [latMechanic, latUser, lngMechanic, lngUser]);
-  console.log(dataMechanic);
   let renderItem = ({item, index}) => {
     if (item.isChoose === false) {
       return;
@@ -304,7 +300,7 @@ const AcceptComponent = ({
             <View style={styles.bottomBodyTextContainer}>
               <View style={styles.bottomBodyTitleContainer}>
                 <Text style={styles.bottomBodyTextName}>
-                  {dataMechanic.name}
+                  {dataMechanic.fullName}
                 </Text>
                 <Text style={styles.bottomBodyText}>{dataMechanic.phone}</Text>
                 <Text style={styles.bottomBodyText}>
@@ -359,36 +355,54 @@ const AcceptComponent = ({
             <TouchableOpacity
               style={styles.bottomFooterButtonCall}
               onPress={() => {
-                navigation.navigate('EvaluateComponent', {
-                  price: totalCost,
-                  name: dataMechanic.name,
-                  phone: dataMechanic.phone,
-                  detailsFix: detailsFix,
-                  avatar: dataMechanic.avatar,
-                  address: address,
-                  cate: cate,
-                  vehicleName: name,
-                  id: cusID,
-                  mecID: dataMechanic.id,
-                });
+                call(args).catch(console.error);
               }}>
               <FontAwesomeIcon icon={faPhoneAlt} color="#fff" size={20} />
             </TouchableOpacity>
           </View>
           {/* Hủy dịch vụ */}
           {isShowInfo === true ? (
-            <TouchableOpacity
-              style={styles.bottomFooterButtonCancel}
-              onPress={() => {
-                navigation.navigate('FixInfoDetailsComponent', {
-                  address: address,
-                  lat: latUser,
-                  lng: lngUser,
-                  city: city,
-                });
-              }}>
-              <Text style={styles.bottomFooterButtonText}>Hủy dịch vụ</Text>
-            </TouchableOpacity>
+            <View style={styles.bottomFooterButtonUnder}>
+              <TouchableOpacity
+                style={styles.bottomFooterButtonCancel}
+                onPress={() => {
+                  navigation.navigate('CancelComponent', {
+                    id: cusID,
+                    price: totalCost,
+                    avatar: dataMechanic.avatar,
+                    name: dataMechanic.fullName,
+                    phone: dataMechanic.phone,
+                    detailsFix: detailsFix,
+                    mecID: dataMechanic.userID,
+                    address: address,
+                    cate: cate,
+                    vehicleName: name,
+                    status: false,
+                  });
+                }}>
+                <Text style={styles.bottomFooterButtonText}>Hủy dịch vụ</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={styles.bottomFooterButtonComplete}
+                onPress={() => {
+                  navigation.navigate('EvaluateComponent', {
+                    price: totalCost,
+                    name: dataMechanic.fullName,
+                    phone: dataMechanic.phone,
+                    detailsFix: detailsFix,
+                    avatar: dataMechanic.avatar,
+                    address: address,
+                    cate: cate,
+                    vehicleName: name,
+                    id: cusID,
+                    mecID: dataMechanic.userID,
+                  });
+                }}>
+                <Text style={styles.bottomFooterButtonText}>
+                  Giả sử thợ ấn hoàn thành
+                </Text>
+              </TouchableOpacity>
+            </View>
           ) : (
             <View />
           )}
@@ -439,7 +453,7 @@ const styles = StyleSheet.create({
     width: '100%',
   },
   mapDetailsShow: {
-    height: '67%',
+    height: '60%',
     width: '100%',
   },
   // Marker
@@ -449,8 +463,8 @@ const styles = StyleSheet.create({
   },
   // bottom
   bottomContainer: {
-    height: '70%',
-    width: '100%',
+    height: height / 1.5,
+    width: width,
     backgroundColor: '#fff',
     borderTopLeftRadius: 20,
     borderTopRightRadius: 20,
@@ -485,6 +499,7 @@ const styles = StyleSheet.create({
     paddingLeft: 10,
     paddingBottom: 10,
   },
+  // Image
   bottomBodyImageContainer: {
     margin: 3,
     width: 60,
@@ -557,8 +572,9 @@ const styles = StyleSheet.create({
   },
   bottomBodyFixTextContainer: {
     flexDirection: 'row',
-    marginLeft: 15,
-    width: 380,
+    paddingLeft: 15,
+    paddingRight: 10,
+    width: width,
     justifyContent: 'space-between',
   },
   bottomBodyFixTextTitle: {
@@ -577,7 +593,8 @@ const styles = StyleSheet.create({
     marginTop: 10,
     flexDirection: 'row',
     justifyContent: 'space-between',
-    width: 395,
+    width: width,
+    paddingRight: 10,
     marginBottom: 10,
   },
   bottomBodyTotalTitle: {
@@ -590,7 +607,6 @@ const styles = StyleSheet.create({
   },
   // Bottom footer call
   bottomFooterButtonContainer: {
-    height: 50,
     borderTopColor: '#D3D3D3',
     borderTopWidth: 1,
     paddingTop: 10,
@@ -618,17 +634,34 @@ const styles = StyleSheet.create({
     backgroundColor: '#ff0000',
     borderColor: '#ff0000',
     borderRadius: 10,
-    width: '93%',
+    width: width / 2.35,
     height: 40,
     alignItems: 'center',
     justifyContent: 'center',
-    marginRight: 10,
+    marginTop: 10,
+  },
+  // Button Complete
+  bottomFooterButtonComplete: {
+    borderWidth: 1,
+    backgroundColor: '#3399FF',
+    borderColor: '#3399FF',
+    borderRadius: 10,
+    width: width / 2.2,
+    height: 40,
+    alignItems: 'center',
+    justifyContent: 'center',
     marginLeft: 15,
     marginTop: 10,
   },
   bottomFooterButtonText: {
     fontSize: 14,
     color: '#fff',
+    textAlign: 'center',
+  },
+  // Button under
+  bottomFooterButtonUnder: {
+    flexDirection: 'row',
+    marginLeft: 15,
   },
 });
 

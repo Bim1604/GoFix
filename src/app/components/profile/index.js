@@ -141,6 +141,7 @@ const styles = StyleSheet.create({
   bodyUserNavContainer: {
     height: height / 3.5,
     width: width,
+    paddingTop: height / 180,
     backgroundColor: '#fff',
     marginBottom: height / 50,
     justifyContent: 'center',
@@ -166,12 +167,12 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     backgroundColor: '#fb6201',
-    width: width / 2,
+    width: width / 1.8,
     height: height / 20,
     borderWidth: 1,
     borderRadius: 10,
     borderColor: '#fb6201',
-    paddingLeft: width / 30,
+    paddingLeft: '3%',
   },
   bodyUserEditText: {
     fontSize: 17,

@@ -10,9 +10,7 @@ const Stack = createStackNavigator();
 const HistoryScreen = ({navigation, route}) => {
   React.useLayoutEffect(() => {
     const routeName = getFocusedRouteNameFromRoute(route);
-    if (
-      routeName === 'HistoryDetailsComponent'
-    ) {
+    if (routeName === 'HistoryDetailsComponent') {
       navigation.setOptions({
         tabBarStyle: {
           display: 'none',
@@ -28,7 +26,13 @@ const HistoryScreen = ({navigation, route}) => {
   }, [navigation, route]);
   return (
     <Stack.Navigator screenOptions={{headerShown: false}}>
-      <Stack.Screen name="HistoryComponent" component={HistoryComponent} />
+      <Stack.Screen
+        initialParams={{
+          id: route.params.id,
+        }}
+        name="HistoryComponent"
+        component={HistoryComponent}
+      />
       <Stack.Screen name="HistoryDetailsComponent" component={DetailsItem} />
     </Stack.Navigator>
   );

@@ -8,7 +8,6 @@ import {stylesBody} from '../../styles/fixInfo';
 const apiVehicle = 'https://history-search-map.herokuapp.com/api/vehicle';
 
 const BodyComponent = ({navigation, route}) => {
-  console.log(route);
   const [data, setData] = useState([
     {
       cate: '',
