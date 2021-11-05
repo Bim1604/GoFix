@@ -9,7 +9,7 @@ const HistoryComponent = ({navigation, route}) => {
     <View>
       {/* Header */}
       <HeaderComponent content="Lịch sử hoạt động" />
-      <BodyComponent navigation={navigation} id={route.params.id} />
+      <BodyComponent navigation={navigation} id={route.params.id} change={route.params.change} />
     </View>
   );
 };

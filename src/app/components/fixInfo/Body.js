@@ -16,19 +16,19 @@ const BodyComponent = ({navigation, route}) => {
       color: '',
     },
   ]);
-  useEffect(() => {
-    fetch(apiVehicle)
-      .then(res => res.json())
-      .then(json => {
-        let vehicleItem = [];
-        for (let index = 0; index < json.length; index++) {
-          if (route.params.id === json[index].userID) {
-            vehicleItem.push(json[index]);
-          }
+  // useEffect(() => {
+  fetch(apiVehicle)
+    .then(res => res.json())
+    .then(json => {
+      let vehicleItem = [];
+      for (let index = 0; index < json.length; index++) {
+        if (route.params.id === json[index].userID) {
+          vehicleItem.push(json[index]);
         }
-        setData(vehicleItem);
-      });
-  }, [route.params.id, route.params]);
+      }
+      setData(vehicleItem);
+    });
+  // }, [route.params.id, route.params]);
   const ItemVehicle = ({cate, name, number, color}) => {
     return (
       <TouchableOpacity
