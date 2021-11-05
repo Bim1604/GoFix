@@ -62,7 +62,7 @@ const BottomView = ({
             ) {
               console.log('hi');
             } else {
-              fetch('https://nutritious-polarized-radar.glitch.me').then(
+              fetch('http://192.168.1.12:3000').then(
                 navigation.navigate('WaitingMechanicComponent', {
                   latitude: lat,
                   longitude: lng,

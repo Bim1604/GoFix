@@ -39,6 +39,22 @@ const WaitingMechanic = ({navigation, route}) => {
     phone: '',
     userID: '',
   });
+
+  const getToken = async () => {
+    const token = await messaging().getToken();
+    fetch(`http://192.168.1.12:4000/token`, {
+      method: 'POST',
+      headers: {'Content-type': 'application/json'},
+      body: JSON.stringify({
+        token: token,
+      }),
+    });
+    messaging().onMessageSent(messageId => {
+      console.log('Message has been sent to the FCM server', messageId);
+    });
+    console.log('.............: ', token);
+  };
+
   messaging().onMessage(async remoteMessage => {
     console.log('A new FCM message arrived!', JSON.stringify(remoteMessage));
     const recieve = JSON.stringify(remoteMessage.notification.title);
@@ -50,6 +66,7 @@ const WaitingMechanic = ({navigation, route}) => {
     }
   });
   useEffect(() => {
+    getToken();
     fetch(apiAccept)
       .then(res => res.json())
       .then(json => {
