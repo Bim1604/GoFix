@@ -15,6 +15,8 @@ import {
   faWrench,
 } from '@fortawesome/free-solid-svg-icons';
 import call from 'react-native-phone-call';
+import messaging from '@react-native-firebase/messaging';
+
 const apiAccept = 'https://history-search-map.herokuapp.com/api/mechanicAccept';
 
 const WaitingMechanic = ({navigation, route}) => {
@@ -37,7 +39,34 @@ const WaitingMechanic = ({navigation, route}) => {
     phone: '',
     userID: '',
   });
+
+  const getToken = async () => {
+    const token = await messaging().getToken();
+    fetch(`http://192.168.1.12:4000/token`, {
+      method: 'POST',
+      headers: {'Content-type': 'application/json'},
+      body: JSON.stringify({
+        token: token,
+      }),
+    });
+    messaging().onMessageSent(messageId => {
+      console.log('Message has been sent to the FCM server', messageId);
+    });
+    console.log('.............: ', token);
+  };
+
+  messaging().onMessage(async remoteMessage => {
+    console.log('A new FCM message arrived!', JSON.stringify(remoteMessage));
+    const recieve = JSON.stringify(remoteMessage.notification.title);
+    console.log(recieve);
+    if (recieve === '"Đã có thợ nhận đơn."') {
+      if (isLoaded === false) {
+        setIsLoaded(true);
+      }
+    }
+  });
   useEffect(() => {
+    getToken();
     fetch(apiAccept)
       .then(res => res.json())
       .then(json => {
@@ -94,7 +123,7 @@ const WaitingMechanic = ({navigation, route}) => {
     if (isLoaded === false) {
       setTimeout(() => {
         setIsLoaded(true);
-      }, 3000);
+      }, 3000000);
     }
   }, [isLoaded]);
 
@@ -224,6 +253,26 @@ const AcceptComponent = ({
       </View>
     );
   };
+  messaging().onMessage(async remoteMessage => {
+    console.log('A new FCM message arrived!', JSON.stringify(remoteMessage));
+    const recieve = JSON.stringify(remoteMessage.notification.title);
+    console.log(recieve);
+    if (recieve === '"Đã hoàn thành đơn."') {
+      console.log(2);
+      navigation.navigate('EvaluateComponent', {
+        price: totalCost,
+        name: dataMechanic.fullName,
+        phone: dataMechanic.phone,
+        detailsFix: detailsFix,
+        avatar: dataMechanic.avatar,
+        address: address,
+        cate: cate,
+        vehicleName: name,
+        id: cusID,
+        mecID: dataMechanic.userID,
+      });
+    }
+  });
 
   return (
     <View style={styles.mapContainer}>

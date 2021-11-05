@@ -62,23 +62,25 @@ const BottomView = ({
             ) {
               console.log('hi');
             } else {
-              navigation.navigate('WaitingMechanicComponent', {
-                latitude: lat,
-                longitude: lng,
-                address: address,
-                city: city,
-                hetBinh: readyHetBinh ? 'Xe hết bình ác quy' : '',
-                lopXe: readyLopXe ? 'Lốp xe bị phồng' : '',
-                beBanh: readyBeBanh ? 'Bể bánh xe' : '',
-                buGi: readyBugi ? 'Hư bu gi' : '',
-                hopSo: readyTooHot ? 'Lỗi hộp số' : '',
-                chetMay: readyChetMay ? 'Xe chết máy' : '',
-                description: description !== '' ? description : '',
-                phone: phone,
-                cate: cate,
-                name: name,
-                id: id,
-              });
+              fetch('http://192.168.1.12:3000').then(
+                navigation.navigate('WaitingMechanicComponent', {
+                  latitude: lat,
+                  longitude: lng,
+                  address: address,
+                  city: city,
+                  hetBinh: readyHetBinh ? 'Xe hết bình ác quy' : '',
+                  lopXe: readyLopXe ? 'Lốp xe bị phồng' : '',
+                  beBanh: readyBeBanh ? 'Bể bánh xe' : '',
+                  buGi: readyBugi ? 'Hư bu gi' : '',
+                  hopSo: readyTooHot ? 'Lỗi hộp số' : '',
+                  chetMay: readyChetMay ? 'Xe chết máy' : '',
+                  description: description !== '' ? description : '',
+                  phone: phone,
+                  cate: cate,
+                  name: name,
+                  id: id,
+                }),
+              );
             }
           }}>
           <Text style={stylesBottom.default.bottomTextTouchable}>

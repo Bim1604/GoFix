@@ -36,7 +36,7 @@ const VehicleUpdateComponent = ({navigation, route}) => {
       .then(response => {
         return response.json();
       })
-      .then(success => console.log(success));
+  
   };
 
   return (

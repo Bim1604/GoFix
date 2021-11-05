@@ -135,23 +135,33 @@ const apiHistoryCus =
 const BodyComponent = ({navigation, id}) => {
   const [data, setData] = useState();
 
-  const getHistoryCus = async () => {
-    await fetch(apiHistoryCus)
-      .then(res => res.json())
-      .then(json => {
-        let historyItem = [];
-        for (let index = 0; index < json.length; index++) {
-          if (id === json[index].cusID) {
-            historyItem.push(json[index]);
-          }
-        }
-        setData(historyItem);
-      });
-  };
+  // const getHistoryCus = async () => {
+  //   await fetch(apiHistoryCus)
+  //     .then(res => res.json())
+  //     .then(json => {
+  //       let historyItem = [];
+  //       for (let index = 0; index < json.length; index++) {
+  //         if (id === json[index].cusID) {
+  //           historyItem.push(json[index]);
+  //         }
+  //       }
+  //       setData(historyItem);
+  //     });
+  // };
 
-  useEffect(() => {
-    getHistoryCus();
-  });
+  // useEffect(() => {
+  fetch(apiHistoryCus)
+    .then(res => res.json())
+    .then(json => {
+      let historyItem = [];
+      for (let index = 0; index < json.length; index++) {
+        if (id === json[index].cusID) {
+          historyItem.push(json[index]);
+        }
+      }
+      setData(historyItem);
+    });
+  // }, [id]);
   const renderItem = ({item, index}) => {
     return (
       <View>
